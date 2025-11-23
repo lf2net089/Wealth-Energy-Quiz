@@ -395,17 +395,23 @@ function calculateAndShowResults() {
         const ctx = canvas.getContext('2d');
         if (myRadarChart) myRadarChart.destroy();
 
+        // Calculate intermediate profile scores (Average of adjacent energies)
+        // Use percentages for chart data to match the table
+        const starScore = (percentages[0] + percentages[1]) / 2;
+        const dealMakerScore = (percentages[1] + percentages[2]) / 2;
+        const accumulatorScore = (percentages[2] + percentages[3]) / 2;
+        const mechanicScore = (percentages[3] + percentages[0]) / 2;
+
         // 準備 8 軸數據：[春, 明星, 夏, 媒合, 秋, 積蓄, 冬, 技師]
-        // 只有主要能量有分數，中間混合型設為 null
         const chartData = [
-            counts[0], // Spring (Top)
-            null,      // Star (Top-Right)
-            counts[1], // Summer (Right)
-            null,      // Deal Maker (Bottom-Right)
-            counts[2], // Fall (Bottom)
-            null,      // Accumulator (Bottom-Left)
-            counts[3], // Winter (Left)
-            null       // Mechanic (Top-Left)
+            percentages[0],      // Spring (Top)
+            starScore,           // Star (Top-Right)
+            percentages[1],      // Summer (Right)
+            dealMakerScore,      // Deal Maker (Bottom-Right)
+            percentages[2],      // Fall (Bottom)
+            accumulatorScore,    // Accumulator (Bottom-Left)
+            percentages[3],      // Winter (Left)
+            mechanicScore        // Mechanic (Top-Left)
         ];
 
         myRadarChart = new Chart(ctx, {
@@ -427,7 +433,7 @@ function calculateAndShowResults() {
                 scales: {
                     r: {
                         beginAtZero: true,
-                        suggestedMax: Math.max(...counts) + 1,
+                        suggestedMax: Math.max(...percentages) + 10,
                         ticks: { 
                             display: false, // 隱藏刻度數字
                             maxTicksLimit: 4 // 限制網格圈數，讓畫面更像參考圖
