@@ -1,4 +1,4 @@
-// Energy type names mapping
+// Energy & Profile Data Mappings
 const energyTypes = [
   { name: '發電機 (春)', fullName: 'Spring (Dynamo / 發電機)' },
   { name: '火焰 (夏)', fullName: 'Summer (Blaze / 火焰)' },
@@ -6,10 +6,27 @@ const energyTypes = [
   { name: '鋼鐵 (冬)', fullName: 'Winter (Steel / 鋼鐵)' }
 ];
 
-// User answers storage
-let userAnswers = [];
+// State Management
+let currentQuestionIndex = 0;
+let userAnswers = new Array(quizData.length).fill(null); // Initialize empty answers
+let myRadarChart = null;
 
-// Shuffle array function (Fisher-Yates shuffle)
+// DOM Elements
+const views = {
+  welcome: document.getElementById('welcome'),
+  quiz: document.getElementById('quiz-container'),
+  result: document.getElementById('result')
+};
+
+const ui = {
+  questionText: document.getElementById('question-text'),
+  optionsGrid: document.getElementById('options-grid'),
+  progressBar: document.getElementById('progress-bar-fill'),
+  progressText: document.getElementById('progress-text'),
+  prevBtn: document.getElementById('prev-btn')
+};
+
+// Utilities
 function shuffleArray(array) {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -19,163 +36,125 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-// Initialize quiz
-function initQuiz() {
-  const quizContainer = document.getElementById('quiz-container');
-  const questionsDiv = document.getElementById('questions');
-  
-  questionsDiv.innerHTML = '';
-  
-  quizData.forEach((q, index) => {
-    const questionDiv = document.createElement('div');
-    questionDiv.className = 'question-card';
-    
-    const questionTitle = document.createElement('h3');
-    questionTitle.textContent = q.question;
-    questionDiv.appendChild(questionTitle);
-    
-    const optionsDiv = document.createElement('div');
-    optionsDiv.className = 'options';
-    
-    // Shuffle options for this question
-    const shuffledOptions = shuffleArray(q.options);
-    
-    shuffledOptions.forEach((option, optionIndex) => {
-      const label = document.createElement('label');
-      label.className = 'option';
-      
-      const radio = document.createElement('input');
-      radio.type = 'radio';
-      radio.name = `question-${index}`;
-      radio.value = option.value;
-      
-      const span = document.createElement('span');
-      span.textContent = option.text;
-      
-      label.appendChild(radio);
-      label.appendChild(span);
-      optionsDiv.appendChild(label);
-    });
-    
-    questionDiv.appendChild(optionsDiv);
-    questionsDiv.appendChild(questionDiv);
-  });
-}
+// Init
+document.getElementById('start-btn').addEventListener('click', startQuiz);
+document.getElementById('prev-btn').addEventListener('click', goToPrevQuestion);
+document.getElementById('retake-btn').addEventListener('click', () => location.reload());
 
-// Start quiz
 function startQuiz() {
-  document.getElementById('welcome').style.display = 'none';
-  document.getElementById('quiz-container').style.display = 'block';
+  views.welcome.classList.add('hidden');
+  views.quiz.classList.remove('hidden');
+  currentQuestionIndex = 0;
+  renderQuestion();
 }
 
-// Calculate results
-function calculateResults() {
-  // Collect answers
-  userAnswers = [];
-  let allAnswered = true;
+function renderQuestion() {
+  const q = quizData[currentQuestionIndex];
   
-  for (let i = 0; i < quizData.length; i++) {
-    const selected = document.querySelector(`input[name="question-${i}"]:checked`);
-    if (!selected) {
-      allAnswered = false;
-      break;
+  // Update UI Text
+  ui.questionText.textContent = q.question;
+  ui.progressText.textContent = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
+  
+  // Update Progress Bar
+  const progressPercent = ((currentQuestionIndex) / quizData.length) * 100;
+  ui.progressBar.style.width = `${progressPercent}%`;
+
+  // Handle Prev Button (Only allow going back to immediate previous)
+  if (currentQuestionIndex > 0) {
+    ui.prevBtn.classList.remove('hidden');
+    ui.prevBtn.disabled = false;
+  } else {
+    ui.prevBtn.classList.add('hidden');
+  }
+
+  // Render Options (Shuffled)
+  ui.optionsGrid.innerHTML = '';
+  const shuffledOptions = shuffleArray(q.options);
+
+  shuffledOptions.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-card';
+    btn.textContent = opt.text;
+    
+    // Check if previously selected (for visual feedback when going back)
+    if (userAnswers[currentQuestionIndex] === opt.value) {
+      btn.classList.add('selected');
     }
-    userAnswers.push(parseInt(selected.value));
-  }
-  
-  if (!allAnswered) {
-    alert('請回答所有問題！');
-    return;
-  }
-  
-  // Count each energy type
-  const counts = [0, 0, 0, 0];
-  userAnswers.forEach(answer => {
-    counts[answer]++;
-  });
-  
-  // Find main energy type
-  const maxCount = Math.max(...counts);
-  const mainTypeIndex = counts.indexOf(maxCount);
-  
-  // Show results
-  showResults(counts, mainTypeIndex);
-}
 
-// Show results
-function showResults(counts, mainTypeIndex) {
-  document.getElementById('quiz-container').style.display = 'none';
-  document.getElementById('result').style.display = 'block';
-  
-  // Display main energy type
-  const resultTitle = document.getElementById('result-title');
-  resultTitle.textContent = `你的主能量：${energyTypes[mainTypeIndex].name}`;
-  
-  // Create radar chart
-  createRadarChart(counts);
-}
-
-// Create radar chart using Chart.js
-function createRadarChart(counts) {
-  const ctx = document.getElementById('radarChart').getContext('2d');
-  
-  // Destroy existing chart if any
-  if (window.myRadarChart) {
-    window.myRadarChart.destroy();
-  }
-  
-  window.myRadarChart = new Chart(ctx, {
-    type: 'radar',
-    data: {
-      labels: energyTypes.map(t => t.name),
-      datasets: [{
-        label: '能量分布',
-        data: counts,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 2,
-        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        r: {
-          angleLines: {
-            display: true
-          },
-          suggestedMin: 0,
-          suggestedMax: Math.max(...counts) + 2,
-          ticks: {
-            stepSize: 1
-          }
-        }
-      },
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top'
-        }
-      }
-    }
+    btn.onclick = () => handleOptionSelect(opt.value, btn);
+    ui.optionsGrid.appendChild(btn);
   });
 }
 
-// Retake quiz
-function retakeQuiz() {
-  location.reload();
+function handleOptionSelect(value, btnElement) {
+  // Visual feedback
+  const allBtns = document.querySelectorAll('.option-card');
+  allBtns.forEach(b => b.classList.remove('selected'));
+  btnElement.classList.add('selected');
+
+  // Save answer
+  userAnswers[currentQuestionIndex] = value;
+
+  // Auto-advance delay
+  setTimeout(() => {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex++;
+      renderQuestion();
+    } else {
+      calculateAndShowResults();
+    }
+  }, 300); // 300ms delay for better UX
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-  initQuiz();
-  
-  // Add event listeners
-  document.getElementById('start-btn').addEventListener('click', startQuiz);
-  document.getElementById('submit-btn').addEventListener('click', calculateResults);
-  document.getElementById('retake-btn').addEventListener('click', retakeQuiz);
-});
+function goToPrevQuestion() {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    renderQuestion();
+  }
+}
+
+// ... (Result Calculation & Chart.js logic remains the same, ensure to update the final calculate function)
+// Copy the calculateAndShowResults function from previous script or prompt Copilot to generate it based on instructions.js
+function calculateAndShowResults() {
+    views.quiz.classList.add('hidden');
+    views.result.classList.remove('hidden');
+    
+    // 1. Count Scores
+    let counts = [0, 0, 0, 0];
+    userAnswers.forEach(val => {
+        if (val !== null) counts[val]++;
+    });
+
+    // 2. Render Chart
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    if (myRadarChart) myRadarChart.destroy();
+
+    myRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: energyTypes.map(t => t.name),
+            datasets: [{
+                label: '能量分布',
+                data: counts,
+                backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                borderColor: 'rgba(79, 70, 229, 1)',
+                pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                r: {
+                    suggestedMin: 0,
+                    suggestedMax: 10, // Approx max
+                    ticks: { stepSize: 2 }
+                }
+            }
+        }
+    });
+
+    // 3. Calculate Profile (Simplified logic for demo - ask Copilot for full Profile logic)
+    const maxScore = Math.max(...counts);
+    const mainEnergyIndex = counts.indexOf(maxScore);
+    document.getElementById('result-title').textContent = `你的主能量：${energyTypes[mainEnergyIndex].name}`;
+}

@@ -1,182 +1,184 @@
+// Energy Types: 0=Spring(Dynamo), 1=Summer(Blaze), 2=Fall(Tempo), 3=Winter(Steel)
+
 const quizData = [
   {
-    question: "Q1. 拿到一支功能複雜的新手機，你通常？",
+    question: "Q1. 拿到一個全新的任務，你的第一步？",
     options: [
-      { text: "先亂按，試試有什麼新功能", value: 0 },
-      { text: "問朋友這支好不好用", value: 1 },
-      { text: "照設定引導，一步步完成", value: 2 },
-      { text: "先讀規格與評測數據", value: 3 }
+      { text: "不管限制，先想有什麼新招", value: 0 },
+      { text: "先找人討論，問問大家的想法", value: 1 },
+      { text: "先觀望一下，不急著行動", value: 2 },
+      { text: "先讀資料，搞懂邏輯再做", value: 3 }
     ]
   },
   {
-    question: "Q2. 聽別人講話時，最受不了哪種？",
+    question: "Q2. 看到一個賺錢的好機會，關鍵是？",
     options: [
-      { text: "內容重複，沒新意太無聊", value: 0 },
-      { text: "語調平淡，太嚴肅沒溫度", value: 1 },
-      { text: "跳來跳去，太急促跟不上", value: 2 },
-      { text: "邏輯混亂，沒數據沒根據", value: 3 }
+      { text: "這東西夠新、夠酷、沒人做過", value: 0 },
+      { text: "是誰在做？這人值不值得信？", value: 1 },
+      { text: "進場時機對不對？感覺對了嗎？", value: 2 },
+      { text: "數據顯示會賺，風險算得過去", value: 3 }
     ]
   },
   {
-    question: "Q3. 在書店決定拿起這本書是因為？",
+    question: "Q3. 學新東西的時候，你的習慣是？",
     options: [
-      { text: "書名聳動，封面設計很酷", value: 0 },
-      { text: "有名人推薦，作者我聽過", value: 1 },
-      { text: "標題療癒，紙質摸起來舒服", value: 2 },
-      { text: "目錄清晰，分析架構很強", value: 3 }
+      { text: "直接動手試錯，邊做邊學", value: 0 },
+      { text: "找人教我，直接問比較快", value: 1 },
+      { text: "照著步驟，一步一步慢慢來", value: 2 },
+      { text: "先讀原理，把架構搞懂再動手", value: 3 }
     ]
   },
   {
-    question: "Q4. 學生時代的筆記通常長怎樣？",
+    question: "Q4. 大家意見不合吵架了，你會？",
     options: [
-      { text: "塗鴉很多，只有自己看得懂", value: 0 },
-      { text: "寫得不多，都記好笑的事", value: 1 },
-      { text: "字跡工整，標記清楚很乾淨", value: 2 },
-      { text: "條列分明，有邏輯編號", value: 3 }
+      { text: "提出一個新點子轉移焦點", value: 0 },
+      { text: "負責安撫大家，當和事佬", value: 1 },
+      { text: "先不講話，等大家冷靜", value: 2 },
+      { text: "分析利弊，講道理給他們聽", value: 3 }
     ]
   },
   {
-    question: "Q5. 朋友聚餐意見不合，你會？",
+    question: "Q5. 你的時間觀念比較接近？",
     options: [
-      { text: "提議去沒吃過的怪店嚐鮮", value: 0 },
-      { text: "看大家想吃什麼就順著氣氛", value: 1 },
-      { text: "只要不難吃不用排隊都好", value: 2 },
-      { text: "查Google評分找CP值最高的", value: 3 }
+      { text: "隨性，喜歡同時間做很多事", value: 0 },
+      { text: "很滿，時間都花在跟人互動", value: 1 },
+      { text: "穩定，不喜歡行程突然被改", value: 2 },
+      { text: "精準，幾點做什麼都規劃好", value: 3 }
     ]
   },
   {
-    question: "Q6. 買高價品(如筆電)的關鍵一擊？",
+    question: "Q6. 去派對認識新朋友，你會？",
     options: [
-      { text: "設計太酷了，拿出去是焦點", value: 0 },
-      { text: "店員服務好，朋友也大推", value: 1 },
-      { text: "保固完善，現在買有送贈品", value: 2 },
-      { text: "規格比較後，性能價格比最優", value: 3 }
+      { text: "找看起來最特別、有趣的人", value: 0 },
+      { text: "全場遊走，跟每個人都聊兩句", value: 1 },
+      { text: "待在熟人圈，除非有人來搭話", value: 2 },
+      { text: "只找對我有幫助的關鍵人物", value: 3 }
     ]
   },
   {
-    question: "Q7. 工作遇到難題卡關，本能反應？",
+    question: "Q7. 突然出包了！你的直覺反應？",
     options: [
-      { text: "先不管它，晚點靈感會來", value: 0 },
-      { text: "馬上打電話問高手怎麼搞", value: 1 },
-      { text: "找過去案例，慢慢嘗試不求快", value: 2 },
-      { text: "上網找官方手冊研究原理", value: 3 }
+      { text: "快想一個新辦法來救火", value: 0 },
+      { text: "趕快去道歉安撫，處理情緒", value: 1 },
+      { text: "先確認狀況，不要亂承諾", value: 2 },
+      { text: "查紀錄，看是哪個環節出錯", value: 3 }
     ]
   },
   {
-    question: "Q8. 如果由你規劃旅遊，風格偏向？",
+    question: "Q8. 旅行的時候，最重要的是？",
     options: [
-      { text: "探險之旅：看到好玩就停", value: 0 },
-      { text: "社交之旅：大家玩得開心就好", value: 1 },
-      { text: "慢活之旅：睡到自然醒做SPA", value: 2 },
-      { text: "知性之旅：把著名地標看完", value: 3 }
+      { text: "要有探險的驚喜感", value: 0 },
+      { text: "旅伴好不好玩、開不開心", value: 1 },
+      { text: "住得舒服、行程不要太累", value: 2 },
+      { text: "攻略要做足，該去的都要去", value: 3 }
     ]
   },
   {
-    question: "Q9. 團隊開會時，你通常扮演？",
+    question: "Q9. 你最欣賞哪種領袖？",
     options: [
-      { text: "點子王：一直丟新想法", value: 0 },
-      { text: "氣氛組：負責串場聊天", value: 1 },
-      { text: "執行者：確認何時要做完", value: 2 },
-      { text: "糾察隊：負責挑毛病與漏洞", value: 3 }
+      { text: "有遠見，能看見未來的", value: 0 },
+      { text: "有魅力，能激勵人心的", value: 1 },
+      { text: "很可靠，能給安全感的", value: 2 },
+      { text: "很專業，決策精準的", value: 3 }
     ]
   },
   {
-    question: "Q10. 說服別人時，你的習慣招式？",
+    question: "Q10. 想說服別人聽你的，你會？",
     options: [
-      { text: "畫大餅：描繪美好未來", value: 0 },
+      { text: "畫大餅：讓他看到美好未來", value: 0 },
       { text: "講故事：動之以情", value: 1 },
-      { text: "展誠意：強調對大家的好處", value: 2 },
-      { text: "列數據：用證據證明我是對的", value: 3 }
+      { text: "展誠意：讓他覺得你很實在", value: 2 },
+      { text: "列數據：用事實證明", value: 3 }
     ]
   },
   {
-    question: "Q11. 最受不了哪一種主管？",
+    question: "Q11. 你的桌面通常長怎樣？",
     options: [
-      { text: "管超細的控制狂", value: 0 },
-      { text: "沒人性的冷血機器", value: 1 },
-      { text: "朝令夕改的暴君", value: 2 },
-      { text: "邏輯不通的草包", value: 3 }
+      { text: "亂中有序，只有我知道在哪", value: 0 },
+      { text: "貼滿照片、公仔或紀念品", value: 1 },
+      { text: "舒服就好，有抱枕或零食", value: 2 },
+      { text: "乾淨整齊，東西都歸位", value: 3 }
     ]
   },
   {
-    question: "Q12. 上台演講 20 分鐘，最怕發生？",
+    question: "Q12. 做那種很無聊的重複工作，你會？",
     options: [
-      { text: "講到一半忘詞，沒秀到亮點", value: 0 },
-      { text: "台下沒反應，場面冷掉", value: 1 },
-      { text: "講太久超時，耽誤大家下課", value: 2 },
-      { text: "數據引用錯誤，被當場打臉", value: 3 }
+      { text: "很容易分心，拖到最後才做", value: 0 },
+      { text: "邊做邊找人聊天或聽廣播", value: 1 },
+      { text: "乖乖做完，雖然無聊但能忍受", value: 2 },
+      { text: "想辦法優化流程，下次自動化", value: 3 }
     ]
   },
   {
-    question: "Q13. 你的辦公桌/書桌狀態？",
+    question: "Q13. 週末沒事做，比較想？",
     options: [
-      { text: "亂中有序，只有我知道東西在哪", value: 0 },
-      { text: "貼滿照片公仔，很有生活感", value: 1 },
-      { text: "舒適至上，有靠枕跟零食", value: 2 },
-      { text: "極簡整潔，像樣品屋一樣", value: 3 }
+      { text: "創作、發明或去逛市集", value: 0 },
+      { text: "約局、聚餐或打球", value: 1 },
+      { text: "按摩、散步或睡午覺", value: 2 },
+      { text: "閱讀、下棋或整理檔案", value: 3 }
     ]
   },
   {
-    question: "Q14. 週末沒事做，怎麼充電？",
+    question: "Q14. 買東西的標準通常是？",
     options: [
-      { text: "去逛市集找靈感", value: 0 },
-      { text: "跟朋友聚會聊天", value: 1 },
-      { text: "在家追劇睡午覺", value: 2 },
-      { text: "整理檔案與讀書", value: 3 }
+      { text: "新奇、酷炫、獨特", value: 0 },
+      { text: "朋友推薦、很多人買", value: 1 },
+      { text: "質感好、服務好", value: 2 },
+      { text: "CP值高、規格好", value: 3 }
     ]
   },
   {
-    question: "Q15. 衣櫃裡的衣服風格？",
+    question: "Q15. 有錢最棒的地方是？",
     options: [
-      { text: "風格多變，喜歡嘗試新款", value: 0 },
-      { text: "場合取向，穿起來要亮眼", value: 1 },
-      { text: "材質舒服，棉麻寬鬆為主", value: 2 },
-      { text: "機能實用，黑白灰好整理", value: 3 }
+      { text: "自由：想幹嘛就幹嘛", value: 0 },
+      { text: "影響力：能幫助別人", value: 1 },
+      { text: "安全感：不用為錢煩惱", value: 2 },
+      { text: "掌控權：證明自己眼光準", value: 3 }
     ]
   },
   {
-    question: "Q16. 「財富自由」最吸引你的是？",
+    question: "Q16. 比較喜歡哪種電影角色？",
     options: [
-      { text: "自由：想做什麼瘋狂事都行", value: 0 },
-      { text: "影響力：能幫助更多人", value: 1 },
-      { text: "安全感：平穩無憂的日子", value: 2 },
-      { text: "掌控權：證明眼光是正確的", value: 3 }
+      { text: "不按牌理出牌的天才", value: 0 },
+      { text: "熱血講義氣的隊長", value: 1 },
+      { text: "忠誠守護的夥伴", value: 2 },
+      { text: "冷靜分析的軍師", value: 3 }
     ]
   },
   {
-    question: "Q17. 電影裡最欣賞的角色？",
+    question: "Q17. 計畫趕不上變化，你會？",
     options: [
-      { text: "打破常規的天才主角", value: 0 },
-      { text: "團結眾人的熱血領袖", value: 1 },
-      { text: "默默守護的忠誠配角", value: 2 },
-      { text: "冷靜分析的軍師智囊", value: 3 }
+      { text: "覺得好玩，剛好試試新路", value: 0 },
+      { text: "找人訴苦，討個拍", value: 1 },
+      { text: "覺得不安，需要靜一靜", value: 2 },
+      { text: "重新計算，修正計畫", value: 3 }
     ]
   },
   {
-    question: "Q18. 希望墓碑上刻著什麼評價？",
+    question: "Q18. 朋友最常誇你什麼？",
     options: [
-      { text: "與眾不同的創新者", value: 0 },
-      { text: "溫暖受喜愛的萬人迷", value: 1 },
-      { text: "值得信賴的守護者", value: 2 },
-      { text: "建立秩序的智者", value: 3 }
+      { text: "點子很多", value: 0 },
+      { text: "人緣很好", value: 1 },
+      { text: "很靠譜", value: 2 },
+      { text: "邏輯很強", value: 3 }
     ]
   },
   {
-    question: "Q19. 壓力爆炸時的陰影反應？",
+    question: "Q19. 如果要創業，你想做？",
     options: [
-      { text: "煩躁易怒，想把一切推翻", value: 0 },
-      { text: "情緒化，覺得沒人懂我", value: 1 },
-      { text: "退縮封閉，不想面對世界", value: 2 },
-      { text: "冷漠挑剔，拒絕溝通", value: 3 }
+      { text: "開發前所未有的新產品", value: 0 },
+      { text: "做個人品牌或代理", value: 1 },
+      { text: "加盟知名品牌，有SOP", value: 2 },
+      { text: "投資房產或系統，收租金", value: 3 }
     ]
   },
   {
-    question: "Q20. 如果要選一種超能力？",
+    question: "Q20. 選一個超能力？",
     options: [
-      { text: "創造 (無中生有)", value: 0 },
-      { text: "連結 (人體磁鐵)", value: 1 },
-      { text: "感知 (環境敏銳)", value: 2 },
-      { text: "邏輯 (洞察結構)", value: 3 }
+      { text: "無中生有 (創造)", value: 0 },
+      { text: "讀心術 (人際)", value: 1 },
+      { text: "時間感知 (時機)", value: 2 },
+      { text: "超級運算 (邏輯)", value: 3 }
     ]
   }
 ];
