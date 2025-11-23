@@ -198,6 +198,15 @@ function calculateAndShowResults() {
     
     const nameDisplay = document.getElementById('display-username');
     if (nameDisplay) nameDisplay.textContent = userName;
+    
+    const userDisplayName = document.getElementById('user-display-name');
+    if (userDisplayName) userDisplayName.textContent = userName;
+    
+    const currentDate = document.getElementById('current-date');
+    if (currentDate) {
+        const now = new Date();
+        currentDate.textContent = `${now.getFullYear()}.${(now.getMonth()+1).toString().padStart(2, '0')}.${now.getDate().toString().padStart(2, '0')}`;
+    }
 
     // 1. Count Scores
     let counts = [0, 0, 0, 0];
