@@ -8,8 +8,8 @@
   --gray-light: #f3f4f6;
   --gray-text: #4b5563;
   --text-main: #1f2937;
-  --radius-lg: 24px;
-  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-md: 12px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
@@ -23,26 +23,27 @@
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   background: var(--bg-gradient);
-  min-height: 100vh;
+  height: 100vh; /* 強制一頁高度 */
+  overflow: hidden; /* 禁止 Body 捲動 (內容區自己捲) */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
   color: var(--text-main);
 }
 
 /* App Container (手機殼) */
 .app-container {
   width: 100%;
-  max-width: 600px; /* 手機寬度最佳化 */
+  max-width: 480px; /* 手機最佳寬度 */
+  height: 95vh;     /* 留一點邊距 */
+  max-height: 850px;
   background: var(--white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  overflow: hidden;
   position: relative;
-  min-height: 80vh; /* 確保有足夠高度 */
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* 確保圓角 */
 }
 
 /* Screen Management */
@@ -50,87 +51,79 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 30px;
-  animation: fadeIn 0.4s ease-out;
+  padding: 20px; /* 縮小邊距 */
+  height: 100%;
+  overflow-y: auto; /* 只有內容過多時才卷動 */
 }
 
 .hidden {
   display: none !important;
 }
 
-/* Content Box (置中內容) */
+/* Content Box */
 .content-box {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; /* 垂直置中 */
   align-items: center;
   text-align: center;
+  gap: 10px; /* 元件間距縮小 */
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: var(--primary);
-  margin-bottom: 1rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-  color: var(--text-main);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 p {
   color: var(--gray-text);
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Buttons */
 .primary-btn, .secondary-btn {
-  padding: 16px 40px;
+  padding: 12px 30px; /* 按鈕變扁一點 */
   border-radius: 50px;
   border: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
-  max-width: 300px;
+  max-width: 280px;
+  transition: transform 0.2s;
 }
 
 .primary-btn {
   background: var(--bg-gradient);
   color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.primary-btn:active {
-  transform: scale(0.98);
-}
+.primary-btn:active { transform: scale(0.98); }
 
 .secondary-btn {
   background: transparent;
-  color: var(--primary);
-  border: 2px solid var(--gray-light);
-  margin-top: 20px;
+  color: #999;
+  font-size: 0.9rem;
+  margin-top: 10px;
 }
 
-.secondary-btn:hover {
-  background: var(--gray-light);
-}
-
-/* Progress Bar */
+/* Quiz Section Compact */
 .progress-container {
-  margin-bottom: 30px;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 .progress-bar-bg {
-  height: 8px;
+  height: 6px;
   background: var(--gray-light);
   border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 #progress-bar-fill {
@@ -141,161 +134,181 @@ p {
 }
 
 #progress-text {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--gray-text);
   text-align: right;
 }
 
-/* Options Grid (選項卡片) */
-#options-grid {
+.question-box {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+h2#question-text {
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+  min-height: 3em; /* 預留高度避免跳動 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#options-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 預設單欄 */
+  gap: 10px;
   width: 100%;
 }
 
 .option-card {
   background: var(--gray-light);
-  padding: 20px;
+  padding: 15px 20px;
   border-radius: var(--radius-md);
-  border: 2px solid transparent;
   text-align: left;
-  font-size: 1rem;
-  color: var(--text-main);
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.option-card:hover { border-color: var(--primary); background: #eef2ff; }
+.option-card.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* =========================================
+   Result Dashboard (重點修改區)
+   ========================================= */
+
+/* 結果頁標題縮小 */
+#result h2 {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: var(--gray-text);
+}
+
+/* 圖表容器 - 大幅縮小並置中 */
+.chart-wrapper {
+  width: 100%;
+  height: 220px; /* 固定高度，確保不佔滿畫面 */
   position: relative;
-  overflow: hidden;
+  margin: 0 auto;
 }
 
-.option-card:hover {
-  background: #eef2ff;
-  border-color: var(--primary);
-}
-
-.option-card:active {
-  transform: scale(0.98);
-}
-
-/* 選中狀態 (JS會加這個class) */
-.option-card.selected {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
-
-/* Result Section Styles */
+/* 結果資訊卡片容器 - 改為 Grid */
 .profile-container {
   width: 100%;
-  text-align: left;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  padding: 15px;
   margin-top: 10px;
+  text-align: left;
+  
+  /* Grid 佈局：上方角色，下方左右分欄 */
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  align-items: start;
+  grid-template-columns: 1fr 1fr; 
+  grid-template-rows: auto auto; /* 兩列 */
+  gap: 15px;
 }
 
+/* 1. 角色頭部 (跨兩欄) */
 .profile-header {
-  grid-column: 1 / -1;
+  grid-column: 1 / -1; /* 佔滿整行 */
   text-align: center;
-  margin-bottom: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
 
 .profile-subtitle {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: bold;
+  display: block;
+  margin-bottom: 2px;
 }
 
 #result-role-name {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: var(--text-main);
-  margin: 5px 0;
+  margin: 0;
+  line-height: 1.2;
 }
 
 #result-role-desc {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--gray-text);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Energy Bars */
-.energy-stats {
-  margin-bottom: 0;
-}
-
-.energy-stats h3, .career-suggestions h3 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.energy-item {
-  margin-bottom: 8px;
-}
-
-.energy-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  margin-bottom: 3px;
-  color: var(--gray-text);
-}
-
-.energy-track {
-  height: 6px;
-  background: #f3f4f6;
-  border-radius: 3px;
+  margin-top: 5px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 限制兩行 */
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Career List */
+/* 2. 能量條 (左下) */
+.energy-stats {
+  grid-column: 1 / 2;
+}
+
+.energy-stats h3, .career-suggestions h3 {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  color: var(--text-main);
+  opacity: 0.8;
+}
+
+.energy-item { margin-bottom: 5px; }
+.energy-label {
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+.energy-track {
+  height: 4px; /* 變細 */
+  background: #e2e8f0;
+  border-radius: 2px;
+}
+
+/* 3. 職業建議 (右下) */
+.career-suggestions {
+  grid-column: 2 / 3;
+}
+
 .career-suggestions ul {
   list-style: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column; /* 改為垂直列表更整齊 */
+  gap: 5px;
 }
 
 .career-suggestions li {
-  background: #eff6ff;
-  color: var(--primary);
-  padding: 6px 12px;
-  border-radius: 15px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: var(--text-main);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Result Chart */
-.chart-wrapper {
-  width: 100%;
-  max-width: 250px;
-  margin: 0 auto 10px;
-  position: relative;
+/* 重測按鈕 - 緊湊 */
+#retake-btn {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 0.95rem;
 }
 
-/* Responsive Fixes */
-@media (max-width: 480px) {
-  body { padding: 0; }
-  .app-container { border-radius: 0; min-height: 100vh; }
-  h1 { font-size: 1.5rem; }
-  .option-card { padding: 15px; }
-  
-  .profile-container {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .chart-wrapper {
-    max-width: 200px;
-  }
+/* Media Queries for Small Phones */
+@media (max-height: 700px) {
+  .chart-wrapper { height: 180px; }
+  #result-role-name { font-size: 1.4rem; }
+  .profile-container { padding: 10px; gap: 10px; }
+  .app-container { height: 100vh; border-radius: 0; }
 }
