@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>財富能量測驗 - Wealth Energy Quiz</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Welcome Screen -->
+    <section id="welcome">
+      <h1>財富能量測驗</h1>
+      <p>
+        這是一個幫助你了解自己財富能量類型的心理測驗。<br>
+        透過 20 個問題，發現你獨特的能量特質：<br>
+        發電機 (春)、火焰 (夏)、節奏 (秋)、鋼鐵 (冬)。<br>
+        請根據直覺選擇最符合你的答案。
+      </p>
+      <button id="start-btn">開始測驗</button>
+    </section>
+
+    <!-- Quiz Container -->
+    <section id="quiz-container">
+      <h2>請選擇最符合你的答案</h2>
+      <div id="questions"></div>
+      <button id="submit-btn">查看結果</button>
+    </section>
+
+    <!-- Result Section -->
+    <section id="result">
+      <h2 id="result-title"></h2>
+      <div class="chart-container">
+        <canvas id="radarChart"></canvas>
+      </div>
+      <button id="retake-btn">重新測驗</button>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  <script src="questions.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
