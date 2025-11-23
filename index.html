@@ -46,8 +46,27 @@
           <canvas id="radarChart"></canvas>
         </div>
 
-        <div id="profile-details">
+        <div id="profile-details" class="profile-container">
+          <div class="profile-header">
+            <span class="profile-subtitle">你的財富角色</span>
+            <h1 id="result-role-name">計算中...</h1>
+            <p id="result-role-desc">角色描述載入中...</p>
           </div>
+
+          <div class="energy-stats">
+            <h3>⚡ 能量分佈</h3>
+            <div id="energy-bars">
+              <!-- JS 將動態插入能量條 -->
+            </div>
+          </div>
+
+          <div class="career-suggestions">
+            <h3>💼 適合的職業與角色</h3>
+            <ul id="result-careers">
+              <!-- JS 將動態插入職業 -->
+            </ul>
+          </div>
+        </div>
 
         <button id="retake-btn" class="primary-btn" style="margin-top: 30px;">重新測驗</button>
       </div>
