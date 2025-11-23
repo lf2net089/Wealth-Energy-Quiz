@@ -310,20 +310,43 @@ function downloadResultImage() {
   const captureElement = document.getElementById('capture-area');
   const btn = document.getElementById('download-btn');
   
+  if (!captureElement) {
+    console.error("找不到截圖區域 #capture-area");
+    return;
+  }
+
   const originalText = btn.textContent;
   btn.textContent = "生成圖片中...";
   btn.disabled = true;
 
+  // 確保 html2canvas 已載入
+  if (typeof html2canvas === 'undefined') {
+    alert("截圖功能載入失敗，請檢查網路連線");
+    btn.textContent = originalText;
+    btn.disabled = false;
+    return;
+  }
+
   html2canvas(captureElement, {
-    scale: 2,
-    useCORS: true,
-    backgroundColor: '#ffffff',
-    logging: false
+    scale: 2, // 提高解析度
+    useCORS: true, // 允許跨域圖片
+    backgroundColor: '#ffffff', // 強制白底
+    logging: false,
+    onclone: (clonedDoc) => {
+      // 可以在這裡對截圖前的 DOM 做額外處理，例如顯示隱藏元素
+      const clonedElement = clonedDoc.getElementById('capture-area');
+      if (clonedElement) {
+        clonedElement.style.display = 'block'; // 確保可見
+      }
+    }
   }).then(canvas => {
+    // 建立下載連結
     const link = document.createElement('a');
     link.download = `財富能量測驗_${userName}.png`;
     link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link); // Firefox 需要將連結加入 DOM
     link.click();
+    document.body.removeChild(link); // 下載後移除
 
     btn.textContent = originalText;
     btn.disabled = false;

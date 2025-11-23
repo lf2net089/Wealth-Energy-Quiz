@@ -15,12 +15,10 @@
     <section id="welcome" class="screen">
       <div class="content-box">
         <h1>🔮 財富能量測驗</h1>
-        <p id="quiz-info">直覺作答 · 載入中... · 發現你的致富天賦</p>
-        
+        <p>直覺作答 · 20題 · 發現你的致富天賦</p>
         <div class="input-group">
           <input type="text" id="username-input" placeholder="請輸入你的暱稱" maxlength="10">
         </div>
-
         <button id="start-btn" class="primary-btn">開始測驗</button>
       </div>
     </section>
@@ -35,8 +33,7 @@
 
       <div class="question-box">
         <h2 id="question-text">題目載入中...</h2>
-        <div id="options-grid">
-          </div>
+        <div id="options-grid"></div>
       </div>
 
       <div class="nav-controls">
@@ -47,40 +44,43 @@
     <section id="result" class="screen hidden">
       <div class="content-box">
         
-        <div id="capture-area" class="result-card-capture">
-          <h2 class="result-title"><span id="display-username"></span> 的測驗結果</h2>
+        <div id="capture-area" class="result-card">
           
+          <div class="result-meta">
+             <span id="current-date"></span>
+             <span class="meta-divider">|</span>
+             <span id="user-display-name" class="meta-name"></span>
+          </div>
+
+          <div class="profile-header">
+            <span class="profile-subtitle">你的財富角色</span>
+            <h1 id="result-role-name">計算中...</h1>
+            <p id="result-role-desc">角色描述載入中...</p>
+          </div>
+
           <div class="chart-wrapper">
             <canvas id="radarChart"></canvas>
           </div>
 
-          <div id="profile-details" class="profile-container">
-            <div class="profile-header">
-              <span class="profile-subtitle">你的財富角色</span>
-              <h1 id="result-role-name">計算中...</h1>
-              <p id="result-role-desc">角色描述載入中...</p>
-            </div>
-
-            <div class="energy-stats">
+          <div class="stats-grid">
+            <div class="energy-section">
               <h3>⚡ 能量分佈</h3>
-              <div id="energy-bars">
-                <!-- JS 將動態插入能量條 -->
-              </div>
+              <div id="energy-bars"></div>
             </div>
-
-            <div class="career-suggestions">
-              <h3>💼 適合的職業與角色</h3>
-              <ul id="result-careers">
-                <!-- JS 將動態插入職業 -->
-              </ul>
+            
+            <div class="career-section">
+              <h3>💼 適合角色</h3>
+              <ul id="result-careers"></ul>
             </div>
           </div>
           
-          <div class="watermark">Wealth Energy Quiz</div>
+          <div class="footer-watermark">
+            <p>WEALTH ENERGY PROFILE</p>
+          </div>
         </div>
 
         <div class="action-buttons">
-          <button id="download-btn" class="primary-btn" style="background: var(--secondary);">📸 下載結果圖</button>
+          <button id="download-btn" class="primary-btn share-btn">📥 下載結果圖</button>
           <button id="retake-btn" class="secondary-btn">重新測驗</button>
         </div>
 
