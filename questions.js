@@ -1,6 +1,7 @@
 // Energy Types: 0=Spring(Dynamo), 1=Summer(Blaze), 2=Fall(Tempo), 3=Winter(Steel)
 
 const quizData = [
+  // --- 第一階段：直覺反應 (Input) ---
   {
     question: "Q1. 拿到一個全新的任務，你的第一步？",
     options: [
@@ -46,6 +47,7 @@ const quizData = [
       { text: "精準，幾點做什麼都規劃好", value: 3 }
     ]
   },
+  // --- 第二階段：生活型態 (Lifestyle) ---
   {
     question: "Q6. 去派對認識新朋友，你會？",
     options: [
@@ -91,13 +93,14 @@ const quizData = [
       { text: "列數據：用事實證明", value: 3 }
     ]
   },
+  // --- 第三階段：微觀行為 (Micro-Behavior) ---
   {
-    question: "Q11. 你的桌面通常長怎樣？",
+    question: "Q11. 你的電腦桌面通常長怎樣？",
     options: [
-      { text: "亂中有序，只有我知道在哪", value: 0 },
-      { text: "貼滿照片、公仔或紀念品", value: 1 },
-      { text: "舒服就好，有抱枕或零食", value: 2 },
-      { text: "乾淨整齊，東西都歸位", value: 3 }
+      { text: "檔案散落各地，但我找得到", value: 0 },
+      { text: "放這陣子要用的，或是有趣的桌布", value: 1 },
+      { text: "乾淨舒服，不想看到太多圖示", value: 2 },
+      { text: "分類資料夾，井然有序", value: 3 }
     ]
   },
   {
@@ -136,6 +139,7 @@ const quizData = [
       { text: "掌控權：證明自己眼光準", value: 3 }
     ]
   },
+  // --- 第四階段：價值觀與壓力 (Values & Stress) ---
   {
     question: "Q16. 比較喜歡哪種電影角色？",
     options: [
@@ -179,6 +183,188 @@ const quizData = [
       { text: "讀心術 (人際)", value: 1 },
       { text: "時間感知 (時機)", value: 2 },
       { text: "超級運算 (邏輯)", value: 3 }
+    ]
+  },
+  // --- 第五階段：加強驗證題 (Consistency Check) ---
+  {
+    question: "Q21. 第一次嘗試做一道新菜，你會？",
+    options: [
+      { text: "憑感覺加料，自創食譜", value: 0 },
+      { text: "打電話問會煮飯的朋友", value: 1 },
+      { text: "邊看影片邊做，慢慢來", value: 2 },
+      { text: "嚴格按照食譜的克數與時間", value: 3 }
+    ]
+  },
+  {
+    question: "Q22. 玩策略遊戲或大富翁，你的風格是？",
+    options: [
+      { text: "冒險派：喜歡嘗試高風險高報酬", value: 0 },
+      { text: "外交派：靠結盟或談判來獲勝", value: 1 },
+      { text: "保守派：穩穩存錢，不亂花", value: 2 },
+      { text: "精算派：計算每一步的期望值", value: 3 }
+    ]
+  },
+  {
+    question: "Q23. 什麼樣的場合最讓你感到能量被吸乾？",
+    options: [
+      { text: "充滿規矩、不能隨意走動的地方", value: 0 },
+      { text: "只有我一個人，沒人可以講話", value: 1 },
+      { text: "一直有人催促，氣氛很緊張", value: 2 },
+      { text: "充滿情緒化發言，沒有邏輯的對話", value: 3 }
+    ]
+  },
+  {
+    question: "Q24. 需要向陌生人自我介紹時，你傾向？",
+    options: [
+      { text: "秀出我做過的酷作品或想法", value: 0 },
+      { text: "聊聊共同的朋友或興趣", value: 1 },
+      { text: "簡單講重點，保持禮貌距離", value: 2 },
+      { text: "遞上名片，介紹我的專業職稱", value: 3 }
+    ]
+  },
+  {
+    question: "Q25. 去大賣場買東西，你的路徑是？",
+    options: [
+      { text: "沒有固定路線，看到什麼逛什麼", value: 0 },
+      { text: "推著車到處看，遇到試吃就停下來聊", value: 1 },
+      { text: "慢慢逛，享受推車的節奏", value: 2 },
+      { text: "直奔目標區，拿了就走", value: 3 }
+    ]
+  },
+  {
+    question: "Q26. 對於「承諾」這件事，你的態度？",
+    options: [
+      { text: "當下感覺對了就答應，細節以後再說", value: 0 },
+      { text: "不好意思拒絕，常常不小心答應太多", value: 1 },
+      { text: "會想很久，確認做得到才敢答應", value: 2 },
+      { text: "白紙黑字寫下來才算數", value: 3 }
+    ]
+  },
+  {
+    question: "Q27. 收到別人負面批評時，第一反應？",
+    options: [
+      { text: "覺得對方不懂我的明白，懶得解釋", value: 0 },
+      { text: "很受傷，覺得是不是我不討人喜歡", value: 1 },
+      { text: "默默承受，想說忍一下就過了", value: 2 },
+      { text: "分析批評內容，看有沒有道理", value: 3 }
+    ]
+  },
+  {
+    question: "Q28. 最理想的一天是？",
+    options: [
+      { text: "沒有行程，充滿驚喜與靈感的一天", value: 0 },
+      { text: "跟一群好朋友熱鬧慶祝的一天", value: 1 },
+      { text: "睡飽飽，在海邊發呆的一天", value: 2 },
+      { text: "所有代辦事項都高效率打勾的一天", value: 3 }
+    ]
+  },
+  {
+    question: "Q29. 遇到一個死結解不開，你會？",
+    options: [
+      { text: "換個角度，甚至把結剪斷（破壞式創新）", value: 0 },
+      { text: "找人幫忙解，兩個人比較快", value: 1 },
+      { text: "慢慢解，花時間總會解開的", value: 2 },
+      { text: "研究結的構造，找出鬆動的點", value: 3 }
+    ]
+  },
+  {
+    question: "Q30. 你認為成功最重要的關鍵是？",
+    options: [
+      { text: "與眾不同的創新力", value: 0 },
+      { text: "強大的人脈網絡", value: 1 },
+      { text: "堅持到底的耐力", value: 2 },
+      { text: "精準無誤的判斷力", value: 3 }
+    ]
+  },
+  // --- 第六階段：深層潛意識 (Deep Subconscious) ---
+  {
+    question: "Q31. 在完全黑暗的房間裡，你最渴望什麼？",
+    options: [
+      { text: "一支手電筒，讓我探索", value: 0 },
+      { text: "一個聲音，確認我不是一個人", value: 1 },
+      { text: "一張舒服的椅子，讓我可以休息", value: 2 },
+      { text: "一張地圖，告訴我出口在哪", value: 3 }
+    ]
+  },
+  {
+    question: "Q32. 你最害怕變成什麼樣的人？",
+    options: [
+      { text: "平庸、無聊、跟大家都一樣的人", value: 0 },
+      { text: "孤獨、被排擠、沒人理的人", value: 1 },
+      { text: "動盪不安、一直活在恐懼中的人", value: 2 },
+      { text: "愚蠢、失控、被情緒左右的人", value: 3 }
+    ]
+  },
+  {
+    question: "Q33. 如果你是動物，你覺得自己是？",
+    options: [
+      { text: "老鷹：飛得高，看得遠", value: 0 },
+      { text: "海豚：聰明，喜歡群體", value: 1 },
+      { text: "大象：穩重，步伐緩慢", value: 2 },
+      { text: "貓頭鷹：冷靜，夜間觀察", value: 3 }
+    ]
+  },
+  {
+    question: "Q34. 看到路邊有人在排隊，你的直覺？",
+    options: [
+      { text: "好奇是在排什麼酷東西？", value: 0 },
+      { text: "好像很熱鬧，去湊個熱鬧好了", value: 1 },
+      { text: "覺得很累，直接走掉", value: 2 },
+      { text: "評估隊伍長度與價值，看值不值得排", value: 3 }
+    ]
+  },
+  {
+    question: "Q35. 手機電量剩 5% 且沒帶充電器，你會？",
+    options: [
+      { text: "不管它，反正沒電就沒電", value: 0 },
+      { text: "到處問路人有沒有得借", value: 1 },
+      { text: "把手機關機，非必要不開", value: 2 },
+      { text: "開啟省電模式，關閉所有後台", value: 3 }
+    ]
+  },
+  {
+    question: "Q36. 你的夢想屋通常具備什麼條件？",
+    options: [
+      { text: "造型獨特，充滿設計感", value: 0 },
+      { text: "有個大客廳或大露台，方便宴客", value: 1 },
+      { text: "溫馨舒適，採光好通風好", value: 2 },
+      { text: "收納功能強大，動線規劃完美", value: 3 }
+    ]
+  },
+  {
+    question: "Q37. 對於「改變」這件事，你的感受？",
+    options: [
+      { text: "興奮，終於有新鮮事了", value: 0 },
+      { text: "還好，只要大家都在我就OK", value: 1 },
+      { text: "抗拒，為什麼要變？", value: 2 },
+      { text: "審慎，評估改變的必要性", value: 3 }
+    ]
+  },
+  {
+    question: "Q38. 當你做錯事被發現，你會？",
+    options: [
+      { text: "笑笑帶過，試圖用幽默化解", value: 0 },
+      { text: "趕快道歉，怕對方生氣", value: 1 },
+      { text: "沉默不語，等待處置", value: 2 },
+      { text: "承認錯誤，並提出修正方案", value: 3 }
+    ]
+  },
+  {
+    question: "Q39. 你覺得什麼是「浪費時間」？",
+    options: [
+      { text: "做一成不變、機械式的事情", value: 0 },
+      { text: "一個人待著，沒人講話", value: 1 },
+      { text: "一直趕場，沒辦法好好休息", value: 2 },
+      { text: "做沒有效率、沒有產出的事", value: 3 }
+    ]
+  },
+  {
+    question: "Q40. 最後一題，你相信直覺嗎？",
+    options: [
+      { text: "超級相信，我的直覺通常很準", value: 0 },
+      { text: "看人，對人的直覺蠻準的", value: 1 },
+      { text: "一半一半，還是會怕怕的", value: 2 },
+      { text: "不相信，我相信證據", value: 3 }
     ]
   }
 ];

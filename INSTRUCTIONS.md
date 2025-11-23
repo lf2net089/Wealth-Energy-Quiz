@@ -1,60 +1,87 @@
-# Wealth Energy Quiz Copilot Instructions
+# Wealth Energy Quiz Copilot Instructions (Architectural Spec)
 
 This file documents the architectural decisions, coding standards, and constraints for the "Wealth-Energy-Quiz" project. AI agents must reference this file before generating code.
 
 ## Project Overview
 
 - **Name**: Wealth-Energy-Quiz
-- **Description**: A static SPA personality test based on "Wealth Dynamics".
-- **UX Pattern**: **Progressive Disclosure** (One question at a time).
-- **Goal**: To provide a psychological, difficult-to-game assessment with immediate visual results.
+- **Description**: A professional-grade SPA personality assessment based on "Wealth Dynamics".
+- **Scale**: **Dynamic Question Set**. The system adapts to the length of the array in `questions.js`.
+- **UX Pattern**: **Progressive Disclosure** (One question at a time) with auto-advance.
+- **Goal**: To provide a psychological, difficult-to-game assessment that analyzes subconscious behaviors and generates a shareable result card.
 
-## Tech Stack
+## Tech Stack & Constraints
 
 - **Core**: HTML5, CSS3, Vanilla JavaScript (ES6+).
-- **Visualization**: Chart.js.
+- **Visualization**: Chart.js (via CDN).
+- **Export Tool**: html2canvas (via CDN) for generating result images.
 - **Hosting**: GitHub Pages.
-- **No Build Tools**: Pure browser-based code.
+- **No Build Tools**: Pure browser-based code (No npm/webpack).
 
-## UX & Logic Requirements (CRITICAL)
+## 🧠 Psychological Design Logic (The "Architect View")
 
-### 1. Question Flow: One-by-One
-- **NO Scrolling List**: Do not show all questions at once.
-- **Auto-Advance**: When a user selects an option, the system must:
-  1. Highlight the selection briefly (e.g., 300ms delay).
-  2. Automatically slide/fade to the next question.
-- **Navigation**:
-  - **Back Button**: Allow going back **ONLY to the immediate previous question** to correct a mistake.
-  - **Progress Bar**: Display current progress (e.g., "Question 5 / 20").
+This is NOT a standard quiz. It uses advanced behavioral profiling techniques:
 
-### 2. Anti-Gaming & Psychological Design
-- **Obfuscation**: Questions should not be obvious (e.g., do not ask "Do you like to start things?"). Instead, ask about **subconscious reactions** to stress, chaos, or boredom.
-- **Short & Punchy**: Question text and Option text must be concise to reduce cognitive load (Speed = Intuition).
-- **Randomization**:
-  - The *order of options* within a question MUST be shuffled every time.
-  - The internal values (0-3) must map correctly despite visual shuffling.
+### 1. Micro-behaviors (微觀行為)
 
-### 3. Feature Logic: The 8 Wealth Profiles (Calculated at End)
-*(Refer to previous instructions for Profile Logic: Creator, Star, Supporter, Deal Maker, Trader, Accumulator, Lord, Mechanic)*
+- **De-labeling**: Questions must NOT ask "Are you creative?" or "Do you like data?".
+- **Implementation**: Questions must ask about specific, unconscious actions (e.g., "How do you organize your desktop?", "What's your path through a supermarket?").
+- **Rationale**: These subconscious habits are impossible to fake and reveal the true energy type.
+
+### 2. Consistency Check (交叉驗證)
+
+- **Design**: The dataset contains paired scenarios measuring the same trait in different contexts.
+- **Logic**: This detects "Mixed Types" vs. "Pure Types".
+
+### 3. Anti-Gaming Mechanics
+
+- **Randomization**: Options within each question must be shuffled (`shuffleArray`) to prevent pattern recognition.
+- **No Backtracking**: Users can only review the *immediate previous* question.
+
+## Feature Logic: The 8 Wealth Profiles
+
+Calculated at the end based on the vector sum of the 4 energies.
+
+### Calculation Method (Vector Math)
+
+Instead of simple thresholds, the code calculates the **Angle** of the user's energy vector on a 2D plane:
+
+- **X-Axis**: Summer (Right) vs. Winter (Left)
+- **Y-Axis**: Spring (Up) vs. Fall (Down)
+- **Result**: The angle (0-360°) determines the profile (e.g., 90° ± 22.5° = Creator).
+
+| Profile | Primary Energy | Angle Approx. |
+| :--- | :--- | :--- |
+| **Creator** | Spring | ~90° (Top) |
+| **Star** | Spring + Summer | ~45° (Top-Right) |
+| **Supporter** | Summer | ~0° / 360° (Right) |
+| **Deal Maker** | Summer + Fall | ~315° (Bottom-Right) |
+| **Trader** | Fall | ~270° (Bottom) |
+| **Accumulator** | Fall + Winter | ~225° (Bottom-Left) |
+| **Lord** | Winter | ~180° (Left) |
+| **Mechanic** | Winter + Spring | ~135° (Top-Left) |
 
 ## Code Style & Conventions
 
-### JavaScript (`script.js`, `questions.js`, `profiles.js`)
-- **State Management**: Use `currentQuestionIndex` to track progress.
-- **Answer Storage**: Store answers in an array/object by question ID.
-- **Scoring**:
+### JavaScript (`script.js`, `questions.js`)
+
+- **Data Integrity**: `questions.js` serves as the single source of truth. The system must dynamically adapt to `quizData.length`.
+- **Scoring System**:
   - `0`: Spring (Dynamo)
   - `1`: Summer (Blaze)
   - `2`: Fall (Tempo)
   - `3`: Winter (Steel)
+- **User Input**: Capture `userName` at the start. Default to a placeholder if empty.
+- **Export Logic**: Use `html2canvas` to capture the `#capture-area` div. Ensure the background is white and scale is set to 2x for Retina displays.
 
 ### CSS (`styles.css`)
-- **Card Layout**: Center the single question card vertically and horizontally.
-- **Animations**: Use simple CSS transitions for switching questions (fade-in/out).
-- **Touch Targets**: Options should be large, clickable blocks (not tiny radio buttons).
+
+- **Layout**: Landscape Dashboard (Bento Grid) for results.
+- **Responsive**: Mobile-first (Vertical layout), switching to Grid layout on wider screens.
+- **Capture Area**: The `#capture-area` must be visually distinct and contain all necessary metadata (Name, Date, Chart, Results) for the screenshot.
 
 ## Workflow
 
-1. Edit `questions.js` to implement the new short-form psychological questions.
-2. Edit `script.js` to implement the `renderQuestion(index)` and `handleOptionClick` logic.
-3. Edit `index.html` to replace the list container with a single card container + progress bar.
+1. **Data Update**: Update `questions.js` to add or modify questions.
+2. **Logic Update**: Ensure `script.js` uses `quizData.length` for all progress calculations.
+3. **UI Update**: Ensure the Progress Bar calculates percentage based on the total question count dynamically.
