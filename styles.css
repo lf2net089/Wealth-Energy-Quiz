@@ -321,28 +321,26 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 /* Radar Chart Container (Custom Layout) */
 .radar-container-custom {
   position: relative;
-  width: 360px; /* 稍微加寬以容納標籤 */
+  width: 360px;
   height: 360px;
   margin: 0 auto 20px auto;
-  /* 輔助對齊用的背景，正式版可移除 */
-  /* background: radial-gradient(circle, transparent 60%, #f7fafc 60%); */
 }
 
-/* Square Grid Background */
+/* Square Grid Background - The "Square Border" */
 .radar-grid-square {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 220px; /* 與圖表區域一致 */
-  height: 220px;
-  border: 1px dashed #e2e8f0; /* 虛線框 */
+  width: 280px; /* Matches the label dot centers */
+  height: 280px;
+  border: 1px dashed #cbd5e0; /* Visible square border */
   z-index: 0;
   pointer-events: none;
 }
 
 .chart-wrapper-custom {
-  width: 220px; /* 加大圖表區域 */
+  width: 220px;
   height: 220px;
   position: absolute;
   top: 50%;
@@ -351,21 +349,24 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   z-index: 1;
 }
 
-/* Profile Labels (Outside) */
+/* Profile Labels (Base) */
 .profile-label {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 0.8rem;
   color: #2c5282;
   font-weight: bold;
   line-height: 1.2;
-  width: 90px; /* 加寬標籤寬度避免換行 */
+  width: 100px; /* Fixed width for centering */
   z-index: 2;
-  pointer-events: none; /* 避免擋住滑鼠 */
+  pointer-events: none;
 }
 .profile-label .en {
   font-size: 0.6rem;
-  color: #718096; /* 英文顏色淡一點 */
+  color: #718096;
   text-transform: uppercase;
   display: block;
   margin-top: 2px;
@@ -373,94 +374,72 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 .profile-label .dot {
   width: 10px;
   height: 10px;
-  background: #ed8936; /* 橘色點點 */
-  border: 2px solid white; /* 增加白邊讓點點更突出 */
+  background: #ed8936;
+  border: 2px solid white;
   border-radius: 50%;
-  margin: 4px auto 0 auto;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-shrink: 0; /* Prevent dot from shrinking */
 }
 
-/* Positioning 8 Profiles - Square Layout */
-/* 
-   Container is 360x360.
-   Chart is 220x220 (centered).
-   We want labels to form a square around the chart.
-   The "Square" corners are Mechanic, Star, Deal Maker, Accumulator.
-   The "Square" sides midpoints are Creator, Supporter, Trader, Lord.
-*/
+/* --- Positioning Logic --- */
+/* Grid Square is 280x280 centered in 360x360 */
+/* Grid Lines at: 40px and 320px */
+/* Dot Radius Compensation: 5px (to center dot on line) */
 
-/* Top (Spring) - Midpoint of Top Edge */
-.pos-top { 
-  top: 20px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-}
-
-/* Top-Right (Star) - Top Right Corner */
-.pos-top-right { 
-  top: 20px; 
-  right: 20px; 
-}
-
-/* Right (Summer) - Midpoint of Right Edge */
-.pos-right { 
-  top: 50%; 
-  right: 0px; 
-  transform: translateY(-50%); 
-}
-
-/* Bottom-Right (Deal Maker) - Bottom Right Corner */
-.pos-bottom-right { 
-  bottom: 20px; 
-  right: 20px; 
-}
-
-/* Bottom (Fall) - Midpoint of Bottom Edge */
-.pos-bottom { 
-  bottom: 20px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-}
-/* 調整點點位置：對於下方標籤，點點應該在文字上方（靠近圖表） */
-.profile-label.pos-bottom .dot,
-.profile-label.pos-bottom-left .dot,
-.profile-label.pos-bottom-right .dot { 
-  margin-bottom: 4px; 
-  margin-top: 0; 
-  /* order: -1; Flex order doesn't work well with block flow unless flex container */
-}
-/* 使用 Flexbox 讓點點可變換位置 */
-.profile-label {
-  display: flex;
+/* Top Row (Text Above Dot) */
+/* Anchor: Bottom of Dot. Target Y: 40px. Top: 40 + 5 = 45px */
+.pos-top-left, .pos-top, .pos-top-right {
   flex-direction: column;
-  align-items: center;
+  top: 45px; 
+  transform: translate(-50%, -100%);
 }
-/* 下半部的標籤，點點在第一位 (order: -1) */
-.pos-bottom .dot, .pos-bottom-left .dot, .pos-bottom-right .dot {
-  order: -1;
+.pos-top-left .dot, .pos-top .dot, .pos-top-right .dot {
+  order: 2; /* Dot at bottom */
+  margin-top: 4px;
+}
+
+/* Bottom Row (Text Below Dot) */
+/* Anchor: Top of Dot. Target Y: 320px. Top: 320 - 5 = 315px */
+.pos-bottom-left, .pos-bottom, .pos-bottom-right {
+  flex-direction: column;
+  top: 315px;
+  transform: translate(-50%, 0);
+}
+.pos-bottom-left .dot, .pos-bottom .dot, .pos-bottom-right .dot {
+  order: -1; /* Dot at top */
   margin-bottom: 4px;
-  margin-top: 0;
 }
 
-
-/* Bottom-Left (Accumulator) - Bottom Left Corner */
-.pos-bottom-left { 
-  bottom: 20px; 
-  left: 20px; 
+/* Left (Text Left of Dot) */
+/* Anchor: Right of Dot. Target X: 40px. Left: 40 + 5 = 45px */
+.pos-left {
+  flex-direction: row;
+  top: 50%;
+  left: 45px;
+  transform: translate(-100%, -50%);
+}
+.pos-left .dot {
+  order: 2; /* Dot at right */
+  margin-left: 8px;
 }
 
-/* Left (Winter) - Midpoint of Left Edge */
-.pos-left { 
-  top: 50%; 
-  left: 0px; 
-  transform: translateY(-50%); 
+/* Right (Text Right of Dot) */
+/* Anchor: Left of Dot. Target X: 320px. Left: 320 - 5 = 315px */
+.pos-right {
+  flex-direction: row;
+  top: 50%;
+  left: 315px;
+  transform: translate(0, -50%);
+}
+.pos-right .dot {
+  order: -1; /* Dot at left */
+  margin-right: 8px;
 }
 
-/* Top-Left (Mechanic) - Top Left Corner */
-.pos-top-left { 
-  top: 20px; 
-  left: 20px; 
-}
+/* Horizontal Positions */
+.pos-top-left, .pos-bottom-left { left: 40px; }
+.pos-top, .pos-bottom { left: 50%; }
+.pos-top-right, .pos-bottom-right { left: 320px; }
 
 /* Inner Energy Labels - Adjusted positions */
 .energy-label-inner {
