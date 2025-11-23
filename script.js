@@ -1,62 +1,108 @@
 // Energy & Profile Data Mappings
 const energyTypes = [
-  { name: '發電機 (春)', fullName: 'Spring (Dynamo / 發電機)' },
-  { name: '火焰 (夏)', fullName: 'Summer (Blaze / 火焰)' },
-  { name: '節奏 (秋)', fullName: 'Fall (Tempo / 節奏)' },
-  { name: '鋼鐵 (冬)', fullName: 'Winter (Steel / 鋼鐵)' }
+  { 
+    name: '發電機 (春)', 
+    fullName: 'Spring (Dynamo / 發電機)',
+    careers: ['創業家', '產品經理 (PM)', '發明家', '藝術總監', '行銷策劃']
+  },
+  { 
+    name: '火焰 (夏)', 
+    fullName: 'Summer (Blaze / 火焰)',
+    careers: ['網紅/KOL', '演說家', '品牌代言人', '執行長 (CEO)', '團隊主管', '公關經理', '人資長', '社群經理']
+  },
+  { 
+    name: '節奏 (秋)', 
+    fullName: 'Fall (Tempo / 節奏)',
+    careers: ['房地產仲介', '創投經紀人', '頂尖業務', '談判專家', '外交官', '金融交易員', '進出口貿易商', '批發零售商', '客服經理', '市場分析師']
+  },
+  { 
+    name: '鋼鐵 (冬)', 
+    fullName: 'Winter (Steel / 鋼鐵)',
+    careers: ['專案經理', '會計師', '銀行家', '資產管理師', '律師', '財務長 (CFO)', '包租公/婆', '數據分析師', '礦場主', '後台管理', '系統工程師', '流程優化師', '加盟體系設計', '營運長 (COO)', '架構師']
+  }
 ];
 
-// 8 Wealth Profiles Data
-const profiles = {
-  creator: {
+// Profile Definitions (Base Data)
+const profileDefinitions = [
+  {
+    key: 'creator',
     name: "創作者 (Creator)",
-    secondary: "明星 / 技師",
-    desc: "你擁有極高的創造力與遠見，擅長從無到有創造新產品或新模式。你不喜歡被細節綁住，適合專注在「發起」與「構思」。",
-    careers: ["創業家", "產品經理 (PM)", "發明家", "藝術總監", "行銷策劃"]
+    energies: [0], // Spring
+    desc: "你擁有極高的創造力與遠見，擅長從無到有創造新產品或新模式。你不喜歡被細節綁住，適合專注在「發起」與「構思」。"
   },
-  star: {
+  {
+    key: 'star',
     name: "明星 (Star)",
-    secondary: "創作者 / 支持者",
-    desc: "你的個人魅力是你最大的資產。你擅長在人群中發光，透過影響力來創造價值。你不需要自己發明產品，而是讓產品因你而紅。",
-    careers: ["網紅/KOL", "演說家", "品牌代言人", "銷售培訓師", "直播主"]
+    energies: [0, 1], // Spring + Summer
+    desc: "你的個人魅力是你最大的資產。你擅長在人群中發光，透過影響力來創造價值。你不需要自己發明產品，而是讓產品因你而紅。"
   },
-  supporter: {
+  {
+    key: 'supporter',
     name: "支持者 (Supporter)",
-    secondary: "明星 / 媒合者",
-    desc: "你是天生的領導者與激勵者。你擅長帶領團隊，讓每個人發揮所長。你的財富來自於「人」，而非產品或系統。",
-    careers: ["執行長 (CEO)", "團隊主管", "公關經理", "人資長", "社群經理"]
+    energies: [1], // Summer
+    desc: "你是天生的領導者與激勵者。你擅長帶領團隊，讓每個人發揮所長。你的財富來自於「人」，而非產品或系統。"
   },
-  deal_maker: {
+  {
+    key: 'deal_maker',
     name: "媒合者 (Deal Maker)",
-    secondary: "支持者 / 商人",
-    desc: "你擁有敏銳的市場嗅覺與人際手腕。你不需要擁有資產，而是透過撮合買賣雙方來獲利。你靠「談判」與「連結」致富。",
-    careers: ["房地產仲介", "創投經紀人", "頂尖業務", "談判專家", "外交官"]
+    energies: [1, 2], // Summer + Fall
+    desc: "你擁有敏銳的市場嗅覺與人際手腕。你不需要擁有資產，而是透過撮合買賣雙方來獲利。你靠「談判」與「連結」致富。"
   },
-  trader: {
+  {
+    key: 'trader',
     name: "商人 (Trader)",
-    secondary: "媒合者 / 積蓄者",
-    desc: "你對時機點與價格波動非常敏感。你不需要創新，也不需要帶人，你的天賦在於「低買高賣」與服務市場需求。",
-    careers: ["金融交易員", "進出口貿易商", "批發零售商", "客服經理", "市場分析師"]
+    energies: [2], // Fall
+    desc: "你對時機點與價格波動非常敏感。你不需要創新，也不需要帶人，你的天賦在於「低買高賣」與服務市場需求。"
   },
-  accumulator: {
+  {
+    key: 'accumulator',
     name: "積蓄者 (Accumulator)",
-    secondary: "商人 / 地主",
-    desc: "你擅長管理與累積。你不喜歡冒險，喜歡透過時間複利與系統化的方式累積資產。你是最可靠的專案守護者。",
-    careers: ["專案經理", "會計師", "銀行家", "資產管理師", "律師"]
+    energies: [2, 3], // Fall + Winter
+    desc: "你擅長管理與累積。你不喜歡冒險，喜歡透過時間複利與系統化的方式累積資產。你是最可靠的專案守護者。"
   },
-  lord: {
+  {
+    key: 'lord',
     name: "地主 (Lord)",
-    secondary: "積蓄者 / 技師",
-    desc: "你喜歡控制資產與現金流。你不需要露面，喜歡在幕後透過數據與系統來掌控大局。你靠「擁有資產」致富。",
-    careers: ["財務長 (CFO)", "包租公/婆", "數據分析師", "礦場主", "後台管理"]
+    energies: [3], // Winter
+    desc: "你喜歡控制資產與現金流。你不需要露面，喜歡在幕後透過數據與系統來掌控大局。你靠「擁有資產」致富。"
   },
-  mechanic: {
+  {
+    key: 'mechanic',
     name: "技師 (Mechanic)",
-    secondary: "地主 / 創作者",
-    desc: "你是優化大師。你擅長把現有的東西拆解、改良，讓它跑得更順、更快。你不需要創造新東西，而是把別人的東西變更好。",
-    careers: ["系統工程師", "流程優化師", "加盟體系設計", "營運長 (COO)", "架構師"]
+    energies: [3, 0], // Winter + Spring
+    desc: "你是優化大師。你擅長把現有的東西拆解、改良，讓它跑得更順、更快。你不需要創造新東西，而是把別人的東西變更好。"
   }
-};
+];
+
+// Dynamically Build Profiles Object
+const profiles = {};
+
+profileDefinitions.forEach((def, index) => {
+  // 1. Calculate Neighbors (Secondary)
+  const prevIndex = (index - 1 + profileDefinitions.length) % profileDefinitions.length;
+  const nextIndex = (index + 1) % profileDefinitions.length;
+  
+  const prevProfile = profileDefinitions[prevIndex];
+  const nextProfile = profileDefinitions[nextIndex];
+  
+  // Extract short names for secondary display
+  const prevName = prevProfile.name.split(' ')[0];
+  const nextName = nextProfile.name.split(' ')[0];
+  
+  // 2. Aggregate Careers from Energies
+  // Use Set to avoid duplicates if any
+  const careerSet = new Set();
+  def.energies.forEach(energyIndex => {
+    energyTypes[energyIndex].careers.forEach(c => careerSet.add(c));
+  });
+
+  profiles[def.key] = {
+    name: def.name,
+    secondary: `${prevName} / ${nextName}`,
+    desc: def.desc,
+    careers: Array.from(careerSet)
+  };
+});
 
 // State Management
 let currentQuestionIndex = 0;
@@ -260,7 +306,88 @@ function calculateAndShowResults() {
     const secondaryProfileEl = document.getElementById('report-secondary-profile');
 
     if (primaryProfileEl) primaryProfileEl.textContent = resultProfile.name.split(' ')[0]; // 只取中文名
-    if (secondaryProfileEl) secondaryProfileEl.textContent = resultProfile.secondary;
+    
+    // Dynamic Secondary Profile Logic
+    // Determine which neighbor is closer based on the angle
+    // Profile Centers:
+    // Creator: 90, Star: 45, Supporter: 0, Deal Maker: 315, Trader: 270, Accumulator: 225, Lord: 180, Mechanic: 135
+    
+    let secondaryName = "";
+    
+    // Define profile centers for calculation
+    const profileCenters = {
+        'creator': 90,
+        'star': 45,
+        'supporter': 0, // or 360
+        'deal_maker': 315,
+        'trader': 270,
+        'accumulator': 225,
+        'lord': 180,
+        'mechanic': 135
+    };
+
+    const center = profileCenters[profileKey];
+    let diff = angle - center;
+    
+    // Normalize diff to -180 to 180
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+
+    // If diff is positive, we are "counter-clockwise" from center (towards smaller angle? No, standard math angle increases CCW)
+    // Wait, standard math: 0 is Right, 90 is Top.
+    // 90 -> 180 is CCW.
+    // So if angle > center, we are CCW.
+    // Let's check neighbors.
+    // Creator (90). CCW neighbor is Mechanic (135). CW neighbor is Star (45).
+    // If angle is 100 ( > 90), we are towards Mechanic.
+    // If angle is 80 ( < 90), we are towards Star.
+    
+    // Special case for Supporter (0).
+    // If angle is 10 (>0), towards Creator? No, Creator is 90. Star is 45.
+    // Wait, 0 -> 45 is CCW.
+    // So if angle > 0, towards Star.
+    // If angle < 0 (e.g. 350 -> -10), towards Deal Maker (315).
+    
+    // Let's map the neighbors explicitly
+    const neighbors = {
+        'creator': { ccw: 'mechanic', cw: 'star' },      // 90 -> 135(CCW), 45(CW)
+        'star': { ccw: 'creator', cw: 'supporter' },     // 45 -> 90(CCW), 0(CW)
+        'supporter': { ccw: 'star', cw: 'deal_maker' },  // 0 -> 45(CCW), 315(CW)
+        'deal_maker': { ccw: 'supporter', cw: 'trader' },// 315 -> 0(CCW), 270(CW)
+        'trader': { ccw: 'deal_maker', cw: 'accumulator' }, // 270 -> 315(CCW), 225(CW)
+        'accumulator': { ccw: 'trader', cw: 'lord' },    // 225 -> 270(CCW), 180(CW)
+        'lord': { ccw: 'accumulator', cw: 'mechanic' },  // 180 -> 225(CCW), 135(CW)
+        'mechanic': { ccw: 'lord', cw: 'creator' }       // 135 -> 180(CCW), 90(CW)
+    };
+
+    // Determine direction
+    // Standard Math Angle: CCW is increasing.
+    // So if angle > center, we are leaning CCW.
+    // if angle < center, we are leaning CW.
+    
+    // Need to handle the 0/360 boundary for Supporter
+    let lean = 'cw'; // default
+    
+    if (profileKey === 'supporter') {
+        // Center is 0.
+        // If angle is 0-22.5, it's > 0 -> CCW (Star)
+        // If angle is 337.5-360, it's effectively negative -> CW (Deal Maker)
+        if (angle >= 0 && angle < 180) lean = 'ccw';
+        else lean = 'cw';
+    } else {
+        if (diff > 0) lean = 'ccw';
+        else lean = 'cw';
+    }
+    
+    const secondaryKey = neighbors[profileKey][lean];
+    const secondaryProfile = profiles[secondaryKey];
+    
+    // Format: "SecondaryName (English)"
+    // Extract Chinese name from "Name (English)" format
+    const secNameParts = secondaryProfile.name.split(' ');
+    secondaryName = `${secNameParts[0]} (${secNameParts[1].replace(/[()]/g, '')})`;
+
+    if (secondaryProfileEl) secondaryProfileEl.textContent = secondaryName;
 
     // 5. Render Chart (Customized for High Imitation - 8 Axis Octagon)
     const canvas = document.getElementById('radarChart');
