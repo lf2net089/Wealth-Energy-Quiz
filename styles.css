@@ -321,26 +321,15 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 /* Radar Chart Container (Custom Layout) */
 .radar-container-custom {
   position: relative;
-  width: 360px;
-  height: 360px;
+  width: 340px; /* 稍微加寬以容納標籤 */
+  height: 340px;
   margin: 0 auto 20px auto;
-}
-
-/* Square Grid Background - The "Square Border" */
-.radar-grid-square {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 280px; /* Matches the label dot centers */
-  height: 280px;
-  border: 1px dashed #cbd5e0; /* Visible square border */
-  z-index: 0;
-  pointer-events: none;
+  /* 輔助對齊用的背景，正式版可移除 */
+  /* background: radial-gradient(circle, transparent 60%, #f7fafc 60%); */
 }
 
 .chart-wrapper-custom {
-  width: 220px;
+  width: 220px; /* 加大圖表區域 */
   height: 220px;
   position: absolute;
   top: 50%;
@@ -349,24 +338,21 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   z-index: 1;
 }
 
-/* Profile Labels (Base) */
+/* Profile Labels (Outside) */
 .profile-label {
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   text-align: center;
   font-size: 0.8rem;
   color: #2c5282;
   font-weight: bold;
   line-height: 1.2;
-  width: 100px; /* Fixed width for centering */
+  width: 90px; /* 加寬標籤寬度避免換行 */
   z-index: 2;
-  pointer-events: none;
+  pointer-events: none; /* 避免擋住滑鼠 */
 }
 .profile-label .en {
   font-size: 0.6rem;
-  color: #718096;
+  color: #718096; /* 英文顏色淡一點 */
   text-transform: uppercase;
   display: block;
   margin-top: 2px;
@@ -374,72 +360,40 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 .profile-label .dot {
   width: 10px;
   height: 10px;
-  background: #ed8936;
-  border: 2px solid white;
+  background: #ed8936; /* 橘色點點 */
+  border: 2px solid white; /* 增加白邊讓點點更突出 */
   border-radius: 50%;
+  margin: 4px auto 0 auto;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  flex-shrink: 0; /* Prevent dot from shrinking */
 }
 
-/* --- Positioning Logic --- */
-/* Grid Square is 280x280 centered in 360x360 */
-/* Grid Lines at: 40px and 320px */
-/* Dot Radius Compensation: 5px (to center dot on line) */
+/* Positioning 8 Profiles - Adjusted for Octagon Layout */
+/* Center is 50%, 50%. We push out from center */
 
-/* Top Row (Text Above Dot) */
-/* Anchor: Bottom of Dot. Target Y: 40px. Top: 40 + 5 = 45px */
-.pos-top-left, .pos-top, .pos-top-right {
-  flex-direction: column;
-  top: 45px; 
-  transform: translate(-50%, -100%);
-}
-.pos-top-left .dot, .pos-top .dot, .pos-top-right .dot {
-  order: 2; /* Dot at bottom */
-  margin-top: 4px;
-}
+/* Top (Spring) */
+.pos-top { top: 15px; left: 50%; transform: translateX(-50%); }
 
-/* Bottom Row (Text Below Dot) */
-/* Anchor: Top of Dot. Target Y: 320px. Top: 320 - 5 = 315px */
-.pos-bottom-left, .pos-bottom, .pos-bottom-right {
-  flex-direction: column;
-  top: 315px;
-  transform: translate(-50%, 0);
-}
-.pos-bottom-left .dot, .pos-bottom .dot, .pos-bottom-right .dot {
-  order: -1; /* Dot at top */
-  margin-bottom: 4px;
-}
+/* Top-Right (Star) */
+.pos-top-right { top: 50px; right: 15px; }
 
-/* Left (Text Left of Dot) */
-/* Anchor: Right of Dot. Target X: 40px. Left: 40 + 5 = 45px */
-.pos-left {
-  flex-direction: row;
-  top: 50%;
-  left: 45px;
-  transform: translate(-100%, -50%);
-}
-.pos-left .dot {
-  order: 2; /* Dot at right */
-  margin-left: 8px;
-}
+/* Right (Summer) */
+.pos-right { top: 50%; right: -25px; transform: translateY(-50%); }
 
-/* Right (Text Right of Dot) */
-/* Anchor: Left of Dot. Target X: 320px. Left: 320 - 5 = 315px */
-.pos-right {
-  flex-direction: row;
-  top: 50%;
-  left: 315px;
-  transform: translate(0, -50%);
-}
-.pos-right .dot {
-  order: -1; /* Dot at left */
-  margin-right: 8px;
-}
+/* Bottom-Right (Deal Maker) */
+.pos-bottom-right { bottom: 50px; right: 15px; }
 
-/* Horizontal Positions */
-.pos-top-left, .pos-bottom-left { left: 40px; }
-.pos-top, .pos-bottom { left: 50%; }
-.pos-top-right, .pos-bottom-right { left: 320px; }
+/* Bottom (Fall) */
+.pos-bottom { bottom: 15px; left: 50%; transform: translateX(-50%); }
+.profile-label.pos-bottom .dot { margin-bottom: 4px; margin-top: 0; order: -1; } /* 點點在字上面 */
+
+/* Bottom-Left (Accumulator) */
+.pos-bottom-left { bottom: 50px; left: 15px; }
+
+/* Left (Winter) */
+.pos-left { top: 50%; left: -25px; transform: translateY(-50%); }
+
+/* Top-Left (Mechanic) */
+.pos-top-left { top: 50px; left: 15px; }
 
 /* Inner Energy Labels - Adjusted positions */
 .energy-label-inner {
@@ -452,10 +406,10 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   font-weight: 600;
 }
 /* 距離中心點約 65px */
-.pos-in-top { top: 90px; left: 50%; transform: translateX(-50%); }
-.pos-in-right { top: 50%; right: 90px; transform: translateY(-50%); }
-.pos-in-bottom { bottom: 90px; left: 50%; transform: translateX(-50%); }
-.pos-in-left { top: 50%; left: 90px; transform: translateY(-50%); }
+.pos-in-top { top: 85px; left: 50%; transform: translateX(-50%); }
+.pos-in-right { top: 50%; right: 85px; transform: translateY(-50%); }
+.pos-in-bottom { bottom: 85px; left: 50%; transform: translateX(-50%); }
+.pos-in-left { top: 50%; left: 85px; transform: translateY(-50%); }
 
 /* Footer */
 .footer-watermark {
