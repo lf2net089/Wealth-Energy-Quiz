@@ -257,12 +257,13 @@ function calculateAndShowResults() {
     // 1. Count Scores
     let counts = [0, 0, 0, 0];
     userAnswers.forEach(val => {
-        if (val !== null) counts[val]++;
+        if (val !== null && val !== undefined) counts[val]++;
     });
 
     // 2. Calculate Percentages
-    const total = userAnswers.length;
-    const percentages = counts.map(c => Math.round((c / total) * 100));
+    // Use total answered count to ensure percentages sum to 100%
+    const totalAnswered = counts.reduce((a, b) => a + b, 0);
+    const percentages = counts.map(c => totalAnswered ? Math.round((c / totalAnswered) * 100) : 0);
 
     // Update Table Scores
     const scoreDynamo = document.getElementById('score-dynamo');
@@ -395,12 +396,14 @@ function calculateAndShowResults() {
         const ctx = canvas.getContext('2d');
         if (myRadarChart) myRadarChart.destroy();
 
-        // Calculate intermediate profile scores (Average of adjacent energies)
-        // Use percentages for chart data to match the table
-        const starScore = (percentages[0] + percentages[1]) / 2;
-        const dealMakerScore = (percentages[1] + percentages[2]) / 2;
-        const accumulatorScore = (percentages[2] + percentages[3]) / 2;
-        const mechanicScore = (percentages[3] + percentages[0]) / 2;
+        // Calculate intermediate profile scores (Vector Magnitude)
+        // Using Pythagorean theorem to represent the combined energy strength
+        // This ensures that if two adjacent energies are high, the corner profile (e.g., Mechanic)
+        // will visually protrude more than the single energies, matching the "Primary Profile" result.
+        const starScore = Math.sqrt(Math.pow(percentages[0], 2) + Math.pow(percentages[1], 2));
+        const dealMakerScore = Math.sqrt(Math.pow(percentages[1], 2) + Math.pow(percentages[2], 2));
+        const accumulatorScore = Math.sqrt(Math.pow(percentages[2], 2) + Math.pow(percentages[3], 2));
+        const mechanicScore = Math.sqrt(Math.pow(percentages[3], 2) + Math.pow(percentages[0], 2));
 
         // 準備 8 軸數據：[春, 明星, 夏, 媒合, 秋, 積蓄, 冬, 技師]
         const chartData = [
@@ -413,6 +416,9 @@ function calculateAndShowResults() {
             percentages[3],      // Winter (Left)
             mechanicScore        // Mechanic (Top-Left)
         ];
+
+        // Calculate max value for scaling
+        const maxVal = Math.max(...percentages, starScore, dealMakerScore, accumulatorScore, mechanicScore);
 
         myRadarChart = new Chart(ctx, {
             type: 'radar',
@@ -433,7 +439,7 @@ function calculateAndShowResults() {
                 scales: {
                     r: {
                         beginAtZero: true,
-                        suggestedMax: Math.max(...percentages) + 10,
+                        suggestedMax: maxVal + 10,
                         ticks: { 
                             display: false, // 隱藏刻度數字
                             maxTicksLimit: 4 // 限制網格圈數，讓畫面更像參考圖
