@@ -8,7 +8,7 @@ const energyTypes = [
 
 // State Management
 let currentQuestionIndex = 0;
-let userAnswers = new Array(quizData.length).fill(null); // Initialize empty answers
+let userAnswers = [];
 let myRadarChart = null;
 
 // DOM Elements
@@ -37,9 +37,31 @@ function shuffleArray(array) {
 }
 
 // Init
-document.getElementById('start-btn').addEventListener('click', startQuiz);
-document.getElementById('prev-btn').addEventListener('click', goToPrevQuestion);
-document.getElementById('retake-btn').addEventListener('click', () => location.reload());
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof quizData === 'undefined') {
+    console.error('Quiz data not loaded!');
+    return;
+  }
+
+  // Initialize answers array
+  userAnswers = new Array(quizData.length).fill(null);
+
+  // Update info text
+  const infoText = document.getElementById('quiz-info');
+  if (infoText) {
+    infoText.textContent = `直覺作答 · ${quizData.length}題 · 發現你的致富天賦`;
+  }
+
+  // Bind events
+  const startBtn = document.getElementById('start-btn');
+  if (startBtn) startBtn.addEventListener('click', startQuiz);
+
+  const prevBtn = document.getElementById('prev-btn');
+  if (prevBtn) prevBtn.addEventListener('click', goToPrevQuestion);
+
+  const retakeBtn = document.getElementById('retake-btn');
+  if (retakeBtn) retakeBtn.addEventListener('click', () => location.reload());
+});
 
 function startQuiz() {
   views.welcome.classList.add('hidden');
