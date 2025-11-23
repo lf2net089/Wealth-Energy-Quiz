@@ -10,41 +10,49 @@ const energyTypes = [
 const profiles = {
   creator: {
     name: "創作者 (Creator)",
+    secondary: "明星 / 技師",
     desc: "你擁有極高的創造力與遠見，擅長從無到有創造新產品或新模式。你不喜歡被細節綁住，適合專注在「發起」與「構思」。",
     careers: ["創業家", "產品經理 (PM)", "發明家", "藝術總監", "行銷策劃"]
   },
   star: {
     name: "明星 (Star)",
+    secondary: "創作者 / 支持者",
     desc: "你的個人魅力是你最大的資產。你擅長在人群中發光，透過影響力來創造價值。你不需要自己發明產品，而是讓產品因你而紅。",
     careers: ["網紅/KOL", "演說家", "品牌代言人", "銷售培訓師", "直播主"]
   },
   supporter: {
     name: "支持者 (Supporter)",
+    secondary: "明星 / 媒合者",
     desc: "你是天生的領導者與激勵者。你擅長帶領團隊，讓每個人發揮所長。你的財富來自於「人」，而非產品或系統。",
     careers: ["執行長 (CEO)", "團隊主管", "公關經理", "人資長", "社群經理"]
   },
   deal_maker: {
     name: "媒合者 (Deal Maker)",
+    secondary: "支持者 / 商人",
     desc: "你擁有敏銳的市場嗅覺與人際手腕。你不需要擁有資產，而是透過撮合買賣雙方來獲利。你靠「談判」與「連結」致富。",
     careers: ["房地產仲介", "創投經紀人", "頂尖業務", "談判專家", "外交官"]
   },
   trader: {
     name: "商人 (Trader)",
+    secondary: "媒合者 / 積蓄者",
     desc: "你對時機點與價格波動非常敏感。你不需要創新，也不需要帶人，你的天賦在於「低買高賣」與服務市場需求。",
     careers: ["金融交易員", "進出口貿易商", "批發零售商", "客服經理", "市場分析師"]
   },
   accumulator: {
     name: "積蓄者 (Accumulator)",
+    secondary: "商人 / 地主",
     desc: "你擅長管理與累積。你不喜歡冒險，喜歡透過時間複利與系統化的方式累積資產。你是最可靠的專案守護者。",
     careers: ["專案經理", "會計師", "銀行家", "資產管理師", "律師"]
   },
   lord: {
     name: "地主 (Lord)",
+    secondary: "積蓄者 / 技師",
     desc: "你喜歡控制資產與現金流。你不需要露面，喜歡在幕後透過數據與系統來掌控大局。你靠「擁有資產」致富。",
     careers: ["財務長 (CFO)", "包租公/婆", "數據分析師", "礦場主", "後台管理"]
   },
   mechanic: {
     name: "技師 (Mechanic)",
+    secondary: "地主 / 創作者",
     desc: "你是優化大師。你擅長把現有的東西拆解、改良，讓它跑得更順、更快。你不需要創造新東西，而是把別人的東西變更好。",
     careers: ["系統工程師", "流程優化師", "加盟體系設計", "營運長 (COO)", "架構師"]
   }
@@ -196,18 +204,10 @@ function calculateAndShowResults() {
     views.quiz.classList.add('hidden');
     views.result.classList.remove('hidden');
     
-    const nameDisplay = document.getElementById('display-username');
-    if (nameDisplay) nameDisplay.textContent = userName;
+    // 1. Update Personal Info
+    const reportUsername = document.getElementById('report-username');
+    if (reportUsername) reportUsername.textContent = userName;
     
-    const userDisplayName = document.getElementById('user-display-name');
-    if (userDisplayName) userDisplayName.textContent = userName;
-    
-    const currentDate = document.getElementById('current-date');
-    if (currentDate) {
-        const now = new Date();
-        currentDate.textContent = `${now.getFullYear()}.${(now.getMonth()+1).toString().padStart(2, '0')}.${now.getDate().toString().padStart(2, '0')}`;
-    }
-
     // 1. Count Scores
     let counts = [0, 0, 0, 0];
     userAnswers.forEach(val => {
@@ -217,6 +217,17 @@ function calculateAndShowResults() {
     // 2. Calculate Percentages
     const total = userAnswers.length;
     const percentages = counts.map(c => Math.round((c / total) * 100));
+
+    // Update Table Scores
+    const scoreDynamo = document.getElementById('score-dynamo');
+    const scoreBlaze = document.getElementById('score-blaze');
+    const scoreTempo = document.getElementById('score-tempo');
+    const scoreSteel = document.getElementById('score-steel');
+
+    if (scoreDynamo) scoreDynamo.textContent = percentages[0] + '%';
+    if (scoreBlaze) scoreBlaze.textContent = percentages[1] + '%';
+    if (scoreTempo) scoreTempo.textContent = percentages[2] + '%';
+    if (scoreSteel) scoreSteel.textContent = percentages[3] + '%';
 
     // 3. Determine Wealth Profile (Vector Calculation)
     // Spring(0)=Up, Summer(1)=Right, Fall(2)=Down, Winter(3)=Left
@@ -244,43 +255,14 @@ function calculateAndShowResults() {
 
     const resultProfile = profiles[profileKey];
 
-    // 4. Update UI Text
-    const roleNameEl = document.getElementById('result-role-name');
-    const roleDescEl = document.getElementById('result-role-desc');
-    
-    if (roleNameEl) roleNameEl.textContent = resultProfile.name;
-    if (roleDescEl) roleDescEl.textContent = resultProfile.desc;
+    // 4. Update Profile Text
+    const primaryProfileEl = document.getElementById('report-primary-profile');
+    const secondaryProfileEl = document.getElementById('report-secondary-profile');
 
-    // 5. Render Energy Bars
-    const energyContainer = document.getElementById('energy-bars');
-    if (energyContainer) {
-        energyContainer.innerHTML = '';
-        const colors = ['#10B981', '#EF4444', '#F59E0B', '#3B82F6']; // Green, Red, Yellow, Blue
-        
-        energyTypes.forEach((type, index) => {
-          const p = percentages[index];
-          const barHtml = `
-            <div class="energy-item">
-              <div class="energy-label">
-                <span>${type.name}</span>
-                <span>${p}%</span>
-              </div>
-              <div class="energy-track">
-                <div class="energy-fill" style="width: ${p}%; background-color: ${colors[index]}"></div>
-              </div>
-            </div>
-          `;
-          energyContainer.innerHTML += barHtml;
-        });
-    }
+    if (primaryProfileEl) primaryProfileEl.textContent = resultProfile.name.split(' ')[0]; // 只取中文名
+    if (secondaryProfileEl) secondaryProfileEl.textContent = resultProfile.secondary;
 
-    // 6. Render Career List
-    const careerList = document.getElementById('result-careers');
-    if (careerList) {
-        careerList.innerHTML = resultProfile.careers.map(c => `<li>${c}</li>`).join('');
-    }
-
-    // 7. Render Chart
+    // 5. Render Chart (Customized for High Imitation)
     const canvas = document.getElementById('radarChart');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -289,13 +271,14 @@ function calculateAndShowResults() {
         myRadarChart = new Chart(ctx, {
             type: 'radar',
             data: {
-                labels: energyTypes.map(t => t.name),
+                // Order: Spring(Top), Summer(Right), Fall(Bottom), Winter(Left)
+                labels: ['', '', '', ''], // Hide default labels, we use custom HTML
                 datasets: [{
-                    label: '能量分布',
                     data: counts,
-                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
-                    borderColor: 'rgba(79, 70, 229, 1)',
-                    pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0)', // Transparent fill
+                    borderColor: '#2b6cb0', // Blue line
+                    pointBackgroundColor: 'transparent', // No points
+                    pointBorderColor: 'transparent',
                     borderWidth: 2
                 }]
             },
@@ -304,12 +287,19 @@ function calculateAndShowResults() {
                     r: {
                         beginAtZero: true,
                         suggestedMax: Math.max(...counts) + 1,
-                        ticks: { stepSize: 2, display: false }
+                        ticks: { display: false, maxTicksLimit: 3 }, // Hide ticks
+                        grid: {
+                            color: '#e2e8f0',
+                            circular: false // Diamond shape grid
+                        },
+                        angleLines: { color: '#e2e8f0' },
+                        pointLabels: { display: false } // Hide axis labels
                     }
                 },
                 plugins: {
                     legend: { display: false }
-                }
+                },
+                maintainAspectRatio: false
             }
         });
     }

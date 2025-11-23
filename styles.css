@@ -224,3 +224,172 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   
   .action-buttons { flex-direction: column; } /* 按鈕變回垂直 */
 }
+
+/* ============================
+   New Report Style (High Imitation)
+   ============================ */
+.result-card-report {
+  background: white;
+  width: 100%;
+  max-width: 500px; /* 限制寬度以符合A4比例感 */
+  margin: 0 auto 20px auto;
+  padding: 30px 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+  font-family: "Microsoft YaHei", "Heiti TC", sans-serif; /* 仿照常見報告字體 */
+}
+
+/* Header */
+.report-header {
+  text-align: center;
+  margin-bottom: 25px;
+  width: 100%;
+}
+.report-logo-placeholder {
+  font-size: 40px;
+  margin-bottom: 5px;
+}
+.report-header h2 {
+  color: #2c5282; /* 深藍色標題 */
+  font-size: 1.4rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Info Section */
+.info-section {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+.info-row {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  align-items: baseline;
+}
+.info-label {
+  width: 90px;
+  text-align: right;
+  color: #4a5568;
+  font-weight: normal;
+}
+.info-value {
+  flex: 1;
+  padding-left: 10px;
+  color: #2d3748;
+  font-weight: 500;
+}
+.info-value.highlight {
+  color: #2b6cb0; /* 藍色強調 */
+  font-weight: bold;
+}
+
+/* Table Section */
+.table-section {
+  width: 100%;
+  border: 1px solid #cbd5e0;
+  margin-bottom: 30px;
+}
+.table-header {
+  background: white;
+  text-align: center;
+  padding: 8px;
+  font-size: 0.9rem;
+  color: #4a5568;
+  border-bottom: 1px solid #cbd5e0;
+}
+.energy-table {
+  display: flex;
+  justify-content: space-around;
+  background: white;
+}
+.et-cell {
+  flex: 1;
+  text-align: center;
+  padding: 10px 5px;
+  font-size: 0.85rem;
+  border-right: 1px solid #cbd5e0;
+  color: #2d3748;
+}
+.et-cell:last-child { border-right: none; }
+
+/* Radar Chart Container (Custom Layout) */
+.radar-container-custom {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  margin: 0 auto 20px auto;
+}
+
+.chart-wrapper-custom {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Profile Labels (Outside) */
+.profile-label {
+  position: absolute;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #2c5282;
+  font-weight: bold;
+  line-height: 1.2;
+  width: 80px;
+  z-index: 2;
+}
+.profile-label .en {
+  font-size: 0.6rem;
+  color: #2c5282;
+  text-transform: uppercase;
+  display: block;
+}
+.profile-label .dot {
+  width: 8px;
+  height: 8px;
+  background: #ed8936; /* 橘色點點 */
+  border-radius: 50%;
+  margin: 2px auto 0 auto;
+}
+
+/* Positioning 8 Profiles */
+/* Center is 160, 160. Radius approx 130px */
+.pos-top { top: 10px; left: 50%; transform: translateX(-50%); }
+.pos-top-right { top: 40px; right: 10px; }
+.pos-right { top: 50%; right: -20px; transform: translateY(-50%); }
+.pos-bottom-right { bottom: 40px; right: 10px; }
+.pos-bottom { bottom: 10px; left: 50%; transform: translateX(-50%); }
+.profile-label.pos-bottom .dot { margin-bottom: 2px; margin-top: 0; order: -1; } /* 點點在字上面 */
+.pos-bottom-left { bottom: 40px; left: 10px; }
+.pos-left { top: 50%; left: -20px; transform: translateY(-50%); }
+.pos-top-left { top: 40px; left: 10px; }
+
+/* Inner Energy Labels */
+.energy-label-inner {
+  position: absolute;
+  font-size: 0.65rem;
+  color: #718096;
+  text-align: center;
+  line-height: 1.1;
+  z-index: 0;
+}
+.pos-in-top { top: 75px; left: 50%; transform: translateX(-50%); }
+.pos-in-right { top: 50%; right: 75px; transform: translateY(-50%); }
+.pos-in-bottom { bottom: 75px; left: 50%; transform: translateX(-50%); }
+.pos-in-left { top: 50%; left: 75px; transform: translateY(-50%); }
+
+/* Footer */
+.footer-watermark {
+  margin-top: 10px;
+  border-top: none;
+  color: #cbd5e0;
+}
