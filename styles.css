@@ -7,8 +7,8 @@
   --gray-light: #f3f4f6;
   --text-main: #1f2937;
   --text-sub: #64748b;
-  --radius-card: 24px;
-  --shadow-card: 0 20px 40px rgba(0,0,0,0.1);
+  --radius-card: 20px;
+  --shadow-card: 0 20px 40px rgba(0,0,0,0.15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -16,162 +16,211 @@
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   background: var(--bg-gradient);
-  min-height: 100vh;
+  height: 100vh; /* 強制一頁高度 */
+  overflow: hidden; /* 禁止 Body 捲動 */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 10px; /* 縮小邊距 */
   color: var(--text-main);
 }
 
 .app-container {
   width: 100%;
-  max-width: 480px; /* 手機最佳寬度 */
+  max-width: 720px; /* 關鍵修改：變寬！ */
   background: var(--white);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
-  overflow: hidden;
   position: relative;
-  min-height: 90vh;
   display: flex;
   flex-direction: column;
+  max-height: 95vh; /* 確保不超過畫面 */
+  overflow: hidden; 
 }
 
-.screen { flex: 1; display: flex; flex-direction: column; padding: 25px; overflow-y: auto; }
+/* Screen Management */
+.screen { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  padding: 20px; 
+  height: 100%;
+  overflow-y: auto; 
+}
 .hidden { display: none !important; }
-.content-box { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
+.content-box { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  width: 100%; 
+}
 
-/* Welcome & Inputs */
-h1 { color: var(--primary); margin-bottom: 10px; font-size: 1.8rem; text-align: center; }
-p { color: var(--text-sub); margin-bottom: 20px; line-height: 1.6; text-align: center; }
+/* Welcome & Inputs (保持置中) */
+h1 { color: var(--primary); margin-bottom: 8px; font-size: 1.6rem; text-align: center; }
+p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: center; }
 
-.input-group { width: 100%; margin-bottom: 20px; text-align: center; }
+.input-group { width: 100%; margin-bottom: 15px; text-align: center; }
 #username-input {
-  width: 100%; max-width: 280px; padding: 12px 20px;
+  width: 100%; max-width: 250px; padding: 10px 15px;
   border: 2px solid #e2e8f0; border-radius: 50px;
-  font-size: 1rem; text-align: center; outline: none;
-  background: #f8fafc; transition: 0.3s;
+  font-size: 0.95rem; text-align: center; outline: none;
+  background: #f8fafc;
 }
 #username-input:focus { border-color: var(--primary); background: white; }
 
-/* Buttons */
+/* Buttons (更緊湊) */
 .primary-btn, .secondary-btn {
-  width: 100%; max-width: 280px; padding: 14px;
-  border-radius: 50px; border: none; font-size: 1rem; font-weight: 600;
+  width: 100%; max-width: 250px; padding: 10px;
+  border-radius: 50px; border: none; font-size: 0.95rem; font-weight: 600;
   cursor: pointer; transition: 0.2s; margin: 0 auto; display: block;
 }
-.primary-btn { background: var(--bg-gradient); color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+.primary-btn { background: var(--bg-gradient); color: white; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3); }
 .primary-btn:active { transform: scale(0.98); }
-.secondary-btn { background: transparent; color: #94a3b8; margin-top: 10px; }
-.share-btn { background: #10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+.secondary-btn { background: transparent; color: #94a3b8; margin-top: 8px; }
+.share-btn { background: #10b981; margin-top: 0; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
 
-/* Quiz Styles */
-.progress-container { margin-bottom: 20px; }
+/* Quiz Styles (不變，但適應寬度) */
+.progress-container { margin-bottom: 15px; width: 100%; }
 .progress-bar-bg { height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden; margin-bottom: 5px; }
 #progress-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
 #progress-text { font-size: 0.8rem; color: #94a3b8; text-align: right; }
 
-.question-box { flex: 1; display: flex; flex-direction: column; justify-content: center; margin-bottom: 20px; }
-#question-text { font-size: 1.3rem; margin-bottom: 20px; text-align: center; line-height: 1.4; color: var(--text-main); }
-#options-grid { display: grid; gap: 12px; }
+.question-box { flex: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; max-width: 500px; margin: 0 auto; }
+#question-text { font-size: 1.2rem; margin-bottom: 15px; text-align: center; color: var(--text-main); min-height: 2.4em; }
+#options-grid { display: grid; gap: 8px; }
 .option-card {
-  background: #f8fafc; padding: 16px 20px; border-radius: 16px;
-  text-align: left; font-size: 0.95rem; cursor: pointer; transition: 0.2s;
+  background: #f8fafc; padding: 12px 16px; border-radius: 12px;
+  text-align: left; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
   border: 2px solid transparent; color: var(--text-main);
 }
 .option-card:hover { background: #eef2ff; border-color: var(--primary); }
 .option-card.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
 /* ============================
-   Result Card (UI 重點修改區)
+   Result Card (橫向佈局核心)
    ============================ */
 .result-card {
   background: white;
   width: 100%;
-  padding: 30px 20px;
-  border-radius: 20px;
-  /* 移除陰影以便截圖更乾淨，保留結構 */
-  margin-bottom: 20px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 確保內部所有元素水平置中 */
+  padding: 20px; /* 減少內距 */
+  border-radius: 16px;
+  margin-bottom: 10px;
+  
+  /* 這裡開啟 Grid 左右分欄 */
+  display: grid;
+  grid-template-columns: 35% 65%; /* 左圖右文 */
+  gap: 20px;
+  align-items: center; /* 垂直置中 */
 }
 
-/* 1. Meta Info */
-.result-meta {
-  font-size: 0.8rem; color: #cbd5e1;
-  margin-bottom: 15px; letter-spacing: 1px;
-}
-.meta-divider { margin: 0 8px; color: #e2e8f0; }
-.meta-name { color: var(--primary); font-weight: bold; }
-
-/* 2. Text Header (置中) */
-.profile-header { 
-  margin-bottom: 25px; 
-  width: 100%;
-}
-.profile-subtitle {
-  font-size: 0.8rem; color: #94a3b8; text-transform: uppercase;
-  letter-spacing: 2px; display: block; margin-bottom: 5px; font-weight: bold;
-}
-#result-role-name {
-  font-size: 2.2rem; /* 加大字體 */
-  color: var(--text-main); 
-  margin: 0 0 10px 0;
-  line-height: 1.2;
-}
-#result-role-desc {
-  font-size: 0.95rem; color: var(--text-sub); line-height: 1.6;
-  max-width: 90%; margin: 0 auto;
-}
-
-/* 3. Chart Wrapper (絕對置中修復) */
+/* 左側：圖表區 */
 .chart-wrapper {
   width: 100%;
-  max-width: 260px; /* 限制寬度，避免手機上太大 */
-  height: 260px;
-  margin: 0 auto 25px auto; /* 關鍵：上下邊距 + 水平置中 */
+  height: 200px; /* 強制高度，避免過大 */
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* 4. Stats Grid (左右並排佈局) */
+/* 為了讓圖表區包含 meta info，我們可能需要微調 HTML 結構，
+   但如果不想動 HTML，我們可以用 Grid Area 或是 Flex Column 處理左側 */
+
+/* 右側：文字資訊區 */
+.profile-header { 
+  text-align: left; /* 改為靠左 */
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 10px;
+}
+
+.profile-subtitle {
+  font-size: 0.75rem; color: var(--primary); text-transform: uppercase;
+  letter-spacing: 1px; font-weight: bold; display: block;
+}
+
+#result-role-name {
+  font-size: 1.6rem; /* 字體適中 */
+  color: var(--text-main); margin: 2px 0;
+  line-height: 1.2;
+}
+
+#result-role-desc {
+  font-size: 0.85rem; color: var(--text-sub); line-height: 1.4;
+  text-align: left;
+}
+
+/* 下方數據區 (在右側欄位內) */
 .stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 左右各半 */
-  gap: 20px;
-  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
   text-align: left;
-  border-top: 1px solid #f1f5f9;
-  padding-top: 20px;
 }
 
 .energy-section h3, .career-section h3 {
-  font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px;
-  text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+  font-size: 0.75rem; color: #94a3b8; margin-bottom: 5px;
+  text-transform: uppercase; font-weight: bold;
 }
 
-/* Energy Bars */
-.energy-item { margin-bottom: 8px; }
-.energy-label { font-size: 0.75rem; display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--text-sub); }
-.energy-track { height: 5px; background: #f1f5f9; border-radius: 10px; overflow: hidden; }
+/* 能量條更扁 */
+.energy-item { margin-bottom: 4px; }
+.energy-label { font-size: 0.7rem; display: flex; justify-content: space-between; margin-bottom: 2px; }
+.energy-track { height: 4px; background: #f1f5f9; border-radius: 2px; overflow: hidden; }
 
-/* Career List */
-.career-section ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+/* 職業列表 */
+.career-section ul { list-style: none; display: flex; flex-wrap: wrap; gap: 5px; }
 .career-section li {
-  font-size: 0.85rem; color: var(--text-main);
-  background: #f8fafc; padding: 8px 12px; border-radius: 8px;
-  text-align: center; border: 1px solid transparent;
+  font-size: 0.75rem; color: var(--text-main);
+  background: #f8fafc; padding: 4px 8px; border-radius: 6px;
+  border: 1px solid #e2e8f0;
 }
 
-/* Footer */
+/* Meta Info & Watermark (調整位置) */
+.result-meta {
+  grid-column: 1 / -1; /* 跨滿整行 */
+  font-size: 0.8rem; color: #cbd5e1;
+  margin-bottom: 0; text-align: right;
+  order: -1; /* 讓它跑到最上面 */
+  display: flex; justify-content: flex-end;
+}
+
 .footer-watermark {
-  width: 100%;
-  margin-top: 25px; padding-top: 15px; border-top: 1px solid #f1f5f9;
+  grid-column: 1 / -1;
+  margin-top: 10px; padding-top: 5px; border-top: 1px solid #f1f5f9;
+  text-align: center;
 }
 .footer-watermark p {
-  font-size: 0.7rem; color: #e2e8f0; letter-spacing: 2px; margin: 0; text-align: center;
+  font-size: 0.65rem; color: #e2e8f0; letter-spacing: 2px; margin: 0;
 }
 
-/* Action Buttons */
-.action-buttons { width: 100%; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+/* 按鈕區 */
+.action-buttons { 
+  width: 100%; 
+  display: flex; 
+  flex-direction: row; /* 按鈕並排 */
+  gap: 10px; 
+  justify-content: center;
+}
+
+/* =========================================
+   手機版適配 (螢幕 < 500px 時切回垂直)
+   ========================================= */
+@media (max-width: 550px) {
+  .result-card {
+    grid-template-columns: 1fr; /* 變回單欄 */
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  .chart-wrapper { height: 180px; margin-bottom: 10px; }
+  
+  .profile-header { text-align: center; }
+  #result-role-desc { text-align: center; }
+  
+  .stats-grid { gap: 10px; }
+  
+  .action-buttons { flex-direction: column; } /* 按鈕變回垂直 */
+}
