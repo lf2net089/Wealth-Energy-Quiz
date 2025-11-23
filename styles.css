@@ -321,11 +321,24 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 /* Radar Chart Container (Custom Layout) */
 .radar-container-custom {
   position: relative;
-  width: 340px; /* 稍微加寬以容納標籤 */
-  height: 340px;
+  width: 360px; /* 稍微加寬以容納標籤 */
+  height: 360px;
   margin: 0 auto 20px auto;
   /* 輔助對齊用的背景，正式版可移除 */
   /* background: radial-gradient(circle, transparent 60%, #f7fafc 60%); */
+}
+
+/* Square Grid Background */
+.radar-grid-square {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px; /* 與圖表區域一致 */
+  height: 220px;
+  border: 1px dashed #e2e8f0; /* 虛線框 */
+  z-index: 0;
+  pointer-events: none;
 }
 
 .chart-wrapper-custom {
@@ -367,33 +380,87 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Positioning 8 Profiles - Adjusted for Octagon Layout */
-/* Center is 50%, 50%. We push out from center */
+/* Positioning 8 Profiles - Square Layout */
+/* 
+   Container is 360x360.
+   Chart is 220x220 (centered).
+   We want labels to form a square around the chart.
+   The "Square" corners are Mechanic, Star, Deal Maker, Accumulator.
+   The "Square" sides midpoints are Creator, Supporter, Trader, Lord.
+*/
 
-/* Top (Spring) */
-.pos-top { top: 15px; left: 50%; transform: translateX(-50%); }
+/* Top (Spring) - Midpoint of Top Edge */
+.pos-top { 
+  top: 20px; 
+  left: 50%; 
+  transform: translateX(-50%); 
+}
 
-/* Top-Right (Star) */
-.pos-top-right { top: 50px; right: 15px; }
+/* Top-Right (Star) - Top Right Corner */
+.pos-top-right { 
+  top: 20px; 
+  right: 20px; 
+}
 
-/* Right (Summer) */
-.pos-right { top: 50%; right: -25px; transform: translateY(-50%); }
+/* Right (Summer) - Midpoint of Right Edge */
+.pos-right { 
+  top: 50%; 
+  right: 0px; 
+  transform: translateY(-50%); 
+}
 
-/* Bottom-Right (Deal Maker) */
-.pos-bottom-right { bottom: 50px; right: 15px; }
+/* Bottom-Right (Deal Maker) - Bottom Right Corner */
+.pos-bottom-right { 
+  bottom: 20px; 
+  right: 20px; 
+}
 
-/* Bottom (Fall) */
-.pos-bottom { bottom: 15px; left: 50%; transform: translateX(-50%); }
-.profile-label.pos-bottom .dot { margin-bottom: 4px; margin-top: 0; order: -1; } /* 點點在字上面 */
+/* Bottom (Fall) - Midpoint of Bottom Edge */
+.pos-bottom { 
+  bottom: 20px; 
+  left: 50%; 
+  transform: translateX(-50%); 
+}
+/* 調整點點位置：對於下方標籤，點點應該在文字上方（靠近圖表） */
+.profile-label.pos-bottom .dot,
+.profile-label.pos-bottom-left .dot,
+.profile-label.pos-bottom-right .dot { 
+  margin-bottom: 4px; 
+  margin-top: 0; 
+  /* order: -1; Flex order doesn't work well with block flow unless flex container */
+}
+/* 使用 Flexbox 讓點點可變換位置 */
+.profile-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* 下半部的標籤，點點在第一位 (order: -1) */
+.pos-bottom .dot, .pos-bottom-left .dot, .pos-bottom-right .dot {
+  order: -1;
+  margin-bottom: 4px;
+  margin-top: 0;
+}
 
-/* Bottom-Left (Accumulator) */
-.pos-bottom-left { bottom: 50px; left: 15px; }
 
-/* Left (Winter) */
-.pos-left { top: 50%; left: -25px; transform: translateY(-50%); }
+/* Bottom-Left (Accumulator) - Bottom Left Corner */
+.pos-bottom-left { 
+  bottom: 20px; 
+  left: 20px; 
+}
 
-/* Top-Left (Mechanic) */
-.pos-top-left { top: 50px; left: 15px; }
+/* Left (Winter) - Midpoint of Left Edge */
+.pos-left { 
+  top: 50%; 
+  left: 0px; 
+  transform: translateY(-50%); 
+}
+
+/* Top-Left (Mechanic) - Top Left Corner */
+.pos-top-left { 
+  top: 20px; 
+  left: 20px; 
+}
 
 /* Inner Energy Labels - Adjusted positions */
 .energy-label-inner {
@@ -406,10 +473,10 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   font-weight: 600;
 }
 /* 距離中心點約 65px */
-.pos-in-top { top: 85px; left: 50%; transform: translateX(-50%); }
-.pos-in-right { top: 50%; right: 85px; transform: translateY(-50%); }
-.pos-in-bottom { bottom: 85px; left: 50%; transform: translateX(-50%); }
-.pos-in-left { top: 50%; left: 85px; transform: translateY(-50%); }
+.pos-in-top { top: 90px; left: 50%; transform: translateX(-50%); }
+.pos-in-right { top: 50%; right: 90px; transform: translateY(-50%); }
+.pos-in-bottom { bottom: 90px; left: 50%; transform: translateX(-50%); }
+.pos-in-left { top: 50%; left: 90px; transform: translateY(-50%); }
 
 /* Footer */
 .footer-watermark {
