@@ -463,3 +463,9 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   border-top: none;
   color: #cbd5e0;
 }
+
+/* Inner Energy Labels - Colors */
+.text-dynamo { color: #009900; } /* Pure Green (High Contrast) */
+.text-blaze { color: #FF0000; } /* Pure Red */
+.text-tempo { color: #F59E0B; } /* High Saturation Orange (Readable Yellow) */
+.text-steel { color: #4A5568; } /* High Contrast Dark Grey (Steel) */
