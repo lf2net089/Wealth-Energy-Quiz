@@ -185,30 +185,27 @@ p {
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-/* Result Chart */
-.chart-wrapper {
-  width: 100%;
-  max-width: 400px;
-  margin: 20px auto;
-  position: relative;
-}
-
 /* Result Section Styles */
 .profile-container {
   width: 100%;
   text-align: left;
-  margin-top: 20px;
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
 }
 
 .profile-header {
+  grid-column: 1 / -1;
   text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
 
 .profile-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -216,26 +213,26 @@ p {
 }
 
 #result-role-name {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: var(--text-main);
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 #result-role-desc {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--gray-text);
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 /* Energy Bars */
 .energy-stats {
-  margin-bottom: 30px;
+  margin-bottom: 0;
 }
 
 .energy-stats h3, .career-suggestions h3 {
-  font-size: 1.1rem;
-  margin-bottom: 15px;
+  font-size: 1rem;
+  margin-bottom: 10px;
   color: var(--text-main);
   display: flex;
   align-items: center;
@@ -243,28 +240,22 @@ p {
 }
 
 .energy-item {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .energy-label {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
-  margin-bottom: 5px;
+  font-size: 0.8rem;
+  margin-bottom: 3px;
   color: var(--gray-text);
 }
 
 .energy-track {
-  height: 8px;
+  height: 6px;
   background: #f3f4f6;
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
-}
-
-.energy-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 1s ease-out;
 }
 
 /* Career List */
@@ -272,28 +263,39 @@ p {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .career-suggestions li {
   background: #eff6ff;
   color: var(--primary);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.95rem;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
   font-weight: 500;
 }
 
-/* Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Result Chart */
+.chart-wrapper {
+  width: 100%;
+  max-width: 250px;
+  margin: 0 auto 10px;
+  position: relative;
 }
 
 /* Responsive Fixes */
 @media (max-width: 480px) {
   body { padding: 0; }
   .app-container { border-radius: 0; min-height: 100vh; }
-  h1 { font-size: 1.8rem; }
-  .option-card { padding: 18px; }
+  h1 { font-size: 1.5rem; }
+  .option-card { padding: 15px; }
+  
+  .profile-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .chart-wrapper {
+    max-width: 200px;
+  }
 }
