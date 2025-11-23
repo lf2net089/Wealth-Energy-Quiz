@@ -54,6 +54,7 @@ const profiles = {
 let currentQuestionIndex = 0;
 let userAnswers = [];
 let myRadarChart = null;
+let userName = "訪客";
 
 // DOM Elements
 const views = {
@@ -105,9 +106,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const retakeBtn = document.getElementById('retake-btn');
   if (retakeBtn) retakeBtn.addEventListener('click', () => location.reload());
+
+  const downloadBtn = document.getElementById('download-btn');
+  if (downloadBtn) downloadBtn.addEventListener('click', downloadResultImage);
 });
 
 function startQuiz() {
+  const input = document.getElementById('username-input');
+  if (input && input.value.trim() !== "") {
+    userName = input.value.trim();
+  } else {
+    userName = "未來的富翁";
+  }
+
   views.welcome.classList.add('hidden');
   views.quiz.classList.remove('hidden');
   currentQuestionIndex = 0;
@@ -185,6 +196,9 @@ function calculateAndShowResults() {
     views.quiz.classList.add('hidden');
     views.result.classList.remove('hidden');
     
+    const nameDisplay = document.getElementById('display-username');
+    if (nameDisplay) nameDisplay.textContent = userName;
+
     // 1. Count Scores
     let counts = [0, 0, 0, 0];
     userAnswers.forEach(val => {
@@ -290,4 +304,33 @@ function calculateAndShowResults() {
             }
         });
     }
+}
+
+function downloadResultImage() {
+  const captureElement = document.getElementById('capture-area');
+  const btn = document.getElementById('download-btn');
+  
+  const originalText = btn.textContent;
+  btn.textContent = "生成圖片中...";
+  btn.disabled = true;
+
+  html2canvas(captureElement, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    logging: false
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `財富能量測驗_${userName}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }).catch(err => {
+    console.error("截圖失敗:", err);
+    alert("圖片生成失敗，請稍後再試");
+    btn.textContent = originalText;
+    btn.disabled = false;
+  });
 }
