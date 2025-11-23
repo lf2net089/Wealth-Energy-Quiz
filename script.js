@@ -262,24 +262,38 @@ function calculateAndShowResults() {
     if (primaryProfileEl) primaryProfileEl.textContent = resultProfile.name.split(' ')[0]; // 只取中文名
     if (secondaryProfileEl) secondaryProfileEl.textContent = resultProfile.secondary;
 
-    // 5. Render Chart (Customized for High Imitation)
+    // 5. Render Chart (Customized for High Imitation - 8 Axis Octagon)
     const canvas = document.getElementById('radarChart');
     if (canvas) {
         const ctx = canvas.getContext('2d');
         if (myRadarChart) myRadarChart.destroy();
 
+        // 準備 8 軸數據：[春, 明星, 夏, 媒合, 秋, 積蓄, 冬, 技師]
+        // 只有主要能量有分數，中間混合型設為 null
+        const chartData = [
+            counts[0], // Spring (Top)
+            null,      // Star (Top-Right)
+            counts[1], // Summer (Right)
+            null,      // Deal Maker (Bottom-Right)
+            counts[2], // Fall (Bottom)
+            null,      // Accumulator (Bottom-Left)
+            counts[3], // Winter (Left)
+            null       // Mechanic (Top-Left)
+        ];
+
         myRadarChart = new Chart(ctx, {
             type: 'radar',
             data: {
-                // Order: Spring(Top), Summer(Right), Fall(Bottom), Winter(Left)
-                labels: ['', '', '', ''], // Hide default labels, we use custom HTML
+                // 8個標籤對應8個軸，這裡留空因為我們用 HTML 自定義標籤
+                labels: ['', '', '', '', '', '', '', ''], 
                 datasets: [{
-                    data: counts,
-                    backgroundColor: 'rgba(255, 255, 255, 0)', // Transparent fill
-                    borderColor: '#2b6cb0', // Blue line
-                    pointBackgroundColor: 'transparent', // No points
+                    data: chartData,
+                    backgroundColor: 'rgba(255, 255, 255, 0)', // 透明填充，模仿參考圖的線條風格
+                    borderColor: '#2b6cb0', // 深藍色線條
+                    pointBackgroundColor: 'transparent', // 隱藏預設點
                     pointBorderColor: 'transparent',
-                    borderWidth: 2
+                    borderWidth: 2,
+                    spanGaps: true // 關鍵：允許跨越 null 連線
                 }]
             },
             options: {
@@ -287,13 +301,20 @@ function calculateAndShowResults() {
                     r: {
                         beginAtZero: true,
                         suggestedMax: Math.max(...counts) + 1,
-                        ticks: { display: false, maxTicksLimit: 3 }, // Hide ticks
+                        ticks: { 
+                            display: false, // 隱藏刻度數字
+                            maxTicksLimit: 4 // 限制網格圈數，讓畫面更像參考圖
+                        }, 
                         grid: {
                             color: '#e2e8f0',
-                            circular: false // Diamond shape grid
+                            circular: false // false = 直線連接軸 (八角形)，true = 圓形
                         },
-                        angleLines: { color: '#e2e8f0' },
-                        pointLabels: { display: false } // Hide axis labels
+                        angleLines: { 
+                            display: true,
+                            color: '#e2e8f0',
+                            borderDash: [5, 5] // 虛線軸線
+                        }, 
+                        pointLabels: { display: false } // 隱藏軸標籤
                     }
                 },
                 plugins: {

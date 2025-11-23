@@ -321,14 +321,16 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 /* Radar Chart Container (Custom Layout) */
 .radar-container-custom {
   position: relative;
-  width: 320px;
-  height: 320px;
+  width: 340px; /* 稍微加寬以容納標籤 */
+  height: 340px;
   margin: 0 auto 20px auto;
+  /* 輔助對齊用的背景，正式版可移除 */
+  /* background: radial-gradient(circle, transparent 60%, #f7fafc 60%); */
 }
 
 .chart-wrapper-custom {
-  width: 200px;
-  height: 200px;
+  width: 220px; /* 加大圖表區域 */
+  height: 220px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -344,48 +346,70 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   color: #2c5282;
   font-weight: bold;
   line-height: 1.2;
-  width: 80px;
+  width: 90px; /* 加寬標籤寬度避免換行 */
   z-index: 2;
+  pointer-events: none; /* 避免擋住滑鼠 */
 }
 .profile-label .en {
   font-size: 0.6rem;
-  color: #2c5282;
+  color: #718096; /* 英文顏色淡一點 */
   text-transform: uppercase;
   display: block;
+  margin-top: 2px;
 }
 .profile-label .dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background: #ed8936; /* 橘色點點 */
+  border: 2px solid white; /* 增加白邊讓點點更突出 */
   border-radius: 50%;
-  margin: 2px auto 0 auto;
+  margin: 4px auto 0 auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Positioning 8 Profiles */
-/* Center is 160, 160. Radius approx 130px */
-.pos-top { top: 10px; left: 50%; transform: translateX(-50%); }
-.pos-top-right { top: 40px; right: 10px; }
-.pos-right { top: 50%; right: -20px; transform: translateY(-50%); }
-.pos-bottom-right { bottom: 40px; right: 10px; }
-.pos-bottom { bottom: 10px; left: 50%; transform: translateX(-50%); }
-.profile-label.pos-bottom .dot { margin-bottom: 2px; margin-top: 0; order: -1; } /* 點點在字上面 */
-.pos-bottom-left { bottom: 40px; left: 10px; }
-.pos-left { top: 50%; left: -20px; transform: translateY(-50%); }
-.pos-top-left { top: 40px; left: 10px; }
+/* Positioning 8 Profiles - Adjusted for Octagon Layout */
+/* Center is 50%, 50%. We push out from center */
 
-/* Inner Energy Labels */
+/* Top (Spring) */
+.pos-top { top: 15px; left: 50%; transform: translateX(-50%); }
+
+/* Top-Right (Star) */
+.pos-top-right { top: 50px; right: 15px; }
+
+/* Right (Summer) */
+.pos-right { top: 50%; right: -25px; transform: translateY(-50%); }
+
+/* Bottom-Right (Deal Maker) */
+.pos-bottom-right { bottom: 50px; right: 15px; }
+
+/* Bottom (Fall) */
+.pos-bottom { bottom: 15px; left: 50%; transform: translateX(-50%); }
+.profile-label.pos-bottom .dot { margin-bottom: 4px; margin-top: 0; order: -1; } /* 點點在字上面 */
+
+/* Bottom-Left (Accumulator) */
+.pos-bottom-left { bottom: 50px; left: 15px; }
+
+/* Left (Winter) */
+.pos-left { top: 50%; left: -25px; transform: translateY(-50%); }
+
+/* Top-Left (Mechanic) */
+.pos-top-left { top: 50px; left: 15px; }
+
+/* Inner Energy Labels - Adjusted positions */
 .energy-label-inner {
   position: absolute;
   font-size: 0.65rem;
-  color: #718096;
+  color: #a0aec0;
   text-align: center;
   line-height: 1.1;
   z-index: 0;
+  font-weight: 600;
 }
-.pos-in-top { top: 75px; left: 50%; transform: translateX(-50%); }
-.pos-in-right { top: 50%; right: 75px; transform: translateY(-50%); }
-.pos-in-bottom { bottom: 75px; left: 50%; transform: translateX(-50%); }
-.pos-in-left { top: 50%; left: 75px; transform: translateY(-50%); }
+/* 距離中心點約 65px */
+.pos-in-top { top: 85px; left: 50%; transform: translateX(-50%); }
+.pos-in-right { top: 50%; right: 85px; transform: translateY(-50%); }
+.pos-in-bottom { bottom: 85px; left: 50%; transform: translateX(-50%); }
+.pos-in-left { top: 50%; left: 85px; transform: translateY(-50%); }
 
 /* Footer */
 .footer-watermark {
