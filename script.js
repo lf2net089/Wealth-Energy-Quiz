@@ -222,62 +222,72 @@ function calculateAndShowResults() {
     const resultProfile = profiles[profileKey];
 
     // 4. Update UI Text
-    document.getElementById('result-role-name').textContent = resultProfile.name;
-    document.getElementById('result-role-desc').textContent = resultProfile.desc;
+    const roleNameEl = document.getElementById('result-role-name');
+    const roleDescEl = document.getElementById('result-role-desc');
+    
+    if (roleNameEl) roleNameEl.textContent = resultProfile.name;
+    if (roleDescEl) roleDescEl.textContent = resultProfile.desc;
 
     // 5. Render Energy Bars
     const energyContainer = document.getElementById('energy-bars');
-    energyContainer.innerHTML = '';
-    const colors = ['#10B981', '#EF4444', '#F59E0B', '#3B82F6']; // Green, Red, Yellow, Blue
-    
-    energyTypes.forEach((type, index) => {
-      const p = percentages[index];
-      const barHtml = `
-        <div class="energy-item">
-          <div class="energy-label">
-            <span>${type.name}</span>
-            <span>${p}%</span>
-          </div>
-          <div class="energy-track">
-            <div class="energy-fill" style="width: ${p}%; background-color: ${colors[index]}"></div>
-          </div>
-        </div>
-      `;
-      energyContainer.innerHTML += barHtml;
-    });
+    if (energyContainer) {
+        energyContainer.innerHTML = '';
+        const colors = ['#10B981', '#EF4444', '#F59E0B', '#3B82F6']; // Green, Red, Yellow, Blue
+        
+        energyTypes.forEach((type, index) => {
+          const p = percentages[index];
+          const barHtml = `
+            <div class="energy-item">
+              <div class="energy-label">
+                <span>${type.name}</span>
+                <span>${p}%</span>
+              </div>
+              <div class="energy-track">
+                <div class="energy-fill" style="width: ${p}%; background-color: ${colors[index]}"></div>
+              </div>
+            </div>
+          `;
+          energyContainer.innerHTML += barHtml;
+        });
+    }
 
     // 6. Render Career List
     const careerList = document.getElementById('result-careers');
-    careerList.innerHTML = resultProfile.careers.map(c => `<li>${c}</li>`).join('');
+    if (careerList) {
+        careerList.innerHTML = resultProfile.careers.map(c => `<li>${c}</li>`).join('');
+    }
 
     // 7. Render Chart
-    const ctx = document.getElementById('radarChart').getContext('2d');
-    if (myRadarChart) myRadarChart.destroy();
+    const canvas = document.getElementById('radarChart');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        if (myRadarChart) myRadarChart.destroy();
 
-    myRadarChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: energyTypes.map(t => t.name),
-            datasets: [{
-                label: '能量分布',
-                data: counts,
-                backgroundColor: 'rgba(79, 70, 229, 0.2)',
-                borderColor: 'rgba(79, 70, 229, 1)',
-                pointBackgroundColor: 'rgba(79, 70, 229, 1)',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            scales: {
-                r: {
-                    beginAtZero: true,
-                    suggestedMax: Math.max(...counts) + 1,
-                    ticks: { stepSize: 2, display: false }
-                }
+        myRadarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: energyTypes.map(t => t.name),
+                datasets: [{
+                    label: '能量分布',
+                    data: counts,
+                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                    borderColor: 'rgba(79, 70, 229, 1)',
+                    pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                    borderWidth: 2
+                }]
             },
-            plugins: {
-                legend: { display: false }
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        suggestedMax: Math.max(...counts) + 1,
+                        ticks: { stepSize: 2, display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
             }
-        }
-    });
+        });
+    }
 }
