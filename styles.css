@@ -459,12 +459,21 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 .pos-in-bottom { bottom: 90px; left: 50%; transform: translateX(-50%); }
 .pos-in-left { top: 50%; left: 90px; transform: translateY(-50%); }
 
-/* Mobile Scale Down */
-@media (max-width: 400px) {
+/* Mobile Scale Down & Centering Fix */
+@media (max-width: 450px) {
   .radar-container-custom {
-    transform: scale(0.9);
+    left: 50%;
+    margin-left: -180px; /* Force center alignment relative to container */
+    transform: scale(0.85);
     transform-origin: center top;
-    margin-bottom: -30px;
+    margin-bottom: -40px; /* Compensate for empty space from scaling */
+  }
+}
+
+@media (max-width: 380px) {
+  .radar-container-custom {
+    transform: scale(0.75);
+    margin-bottom: -70px;
   }
 }
 
