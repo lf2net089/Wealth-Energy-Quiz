@@ -163,6 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const downloadBtn = document.getElementById('download-btn');
   if (downloadBtn) downloadBtn.addEventListener('click', downloadResultImage);
+
+  // Share Button Logic
+  const shareBtn = document.getElementById('share-btn');
+  if (shareBtn && navigator.share) {
+    shareBtn.style.display = 'block'; // Show button if supported
+    shareBtn.addEventListener('click', shareResultImage);
+  }
 });
 
 function startQuiz() {
@@ -521,6 +528,69 @@ function downloadResultImage() {
   }).catch(err => {
     console.error("截圖失敗:", err);
     alert("圖片生成失敗，請稍後再試");
+    btn.textContent = originalText;
+    btn.disabled = false;
+  });
+}
+
+function shareResultImage() {
+  const captureElement = document.getElementById('capture-area');
+  const btn = document.getElementById('share-btn');
+  
+  if (!captureElement) return;
+
+  const originalText = btn.textContent;
+  btn.textContent = "生成中...";
+  btn.disabled = true;
+
+  if (typeof html2canvas === 'undefined') {
+    alert("截圖功能載入失敗");
+    btn.textContent = originalText;
+    btn.disabled = false;
+    return;
+  }
+
+  html2canvas(captureElement, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    logging: false,
+    onclone: (clonedDoc) => {
+      const clonedElement = clonedDoc.getElementById('capture-area');
+      if (clonedElement) clonedElement.style.display = 'block';
+    }
+  }).then(canvas => {
+    canvas.toBlob(async (blob) => {
+      if (!blob) {
+        alert("圖片生成失敗");
+        return;
+      }
+
+      const file = new File([blob], `財富能量測驗_${userName}.png`, { type: 'image/png' });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: '我的財富能量測驗結果',
+            text: `我是 ${userName}，快來看看你的財富天賦是什麼！`
+          });
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            console.error("分享失敗:", err);
+            alert("分享失敗，請重試");
+          }
+        }
+      } else {
+        alert("您的裝置不支援圖片分享，請使用下載功能");
+      }
+
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }, 'image/png');
+  }).catch(err => {
+    console.error("截圖失敗:", err);
+    alert("圖片生成失敗");
     btn.textContent = originalText;
     btn.disabled = false;
   });
