@@ -298,7 +298,11 @@ function calculateAndShowResults() {
     else if (angle >= 112.5 && angle < 157.5) profileKey = 'mechanic';// 135 ± 22.5
 
     // Center point case
-    if (x === 0 && y === 0) profileKey = 'creator';
+    let isBalanced = false;
+    if (x === 0 && y === 0) {
+        profileKey = 'creator'; // Default to avoid errors in neighbor calculation
+        isBalanced = true;
+    }
 
     const resultProfile = profiles[profileKey];
 
@@ -306,89 +310,94 @@ function calculateAndShowResults() {
     const primaryProfileEl = document.getElementById('report-primary-profile');
     const secondaryProfileEl = document.getElementById('report-secondary-profile');
 
-    if (primaryProfileEl) primaryProfileEl.textContent = resultProfile.name.split(' ')[0]; // 只取中文名
-    
-    // Dynamic Secondary Profile Logic
-    // Determine which neighbor is closer based on the angle
-    // Profile Centers:
-    // Creator: 90, Star: 45, Supporter: 0, Deal Maker: 315, Trader: 270, Accumulator: 225, Lord: 180, Mechanic: 135
-    
-    let secondaryName = "";
-    
-    // Define profile centers for calculation
-    const profileCenters = {
-        'creator': 90,
-        'star': 45,
-        'supporter': 0, // or 360
-        'deal_maker': 315,
-        'trader': 270,
-        'accumulator': 225,
-        'lord': 180,
-        'mechanic': 135
-    };
-
-    const center = profileCenters[profileKey];
-    let diff = angle - center;
-    
-    // Normalize diff to -180 to 180
-    if (diff > 180) diff -= 360;
-    if (diff < -180) diff += 360;
-
-    // If diff is positive, we are "counter-clockwise" from center (towards smaller angle? No, standard math angle increases CCW)
-    // Wait, standard math: 0 is Right, 90 is Top.
-    // 90 -> 180 is CCW.
-    // So if angle > center, we are CCW.
-    // Let's check neighbors.
-    // Creator (90). CCW neighbor is Mechanic (135). CW neighbor is Star (45).
-    // If angle is 100 ( > 90), we are towards Mechanic.
-    // If angle is 80 ( < 90), we are towards Star.
-    
-    // Special case for Supporter (0).
-    // If angle is 10 (>0), towards Creator? No, Creator is 90. Star is 45.
-    // Wait, 0 -> 45 is CCW.
-    // So if angle > 0, towards Star.
-    // If angle < 0 (e.g. 350 -> -10), towards Deal Maker (315).
-    
-    // Let's map the neighbors explicitly
-    const neighbors = {
-        'creator': { ccw: 'mechanic', cw: 'star' },      // 90 -> 135(CCW), 45(CW)
-        'star': { ccw: 'creator', cw: 'supporter' },     // 45 -> 90(CCW), 0(CW)
-        'supporter': { ccw: 'star', cw: 'deal_maker' },  // 0 -> 45(CCW), 315(CW)
-        'deal_maker': { ccw: 'supporter', cw: 'trader' },// 315 -> 0(CCW), 270(CW)
-        'trader': { ccw: 'deal_maker', cw: 'accumulator' }, // 270 -> 315(CCW), 225(CW)
-        'accumulator': { ccw: 'trader', cw: 'lord' },    // 225 -> 270(CCW), 180(CW)
-        'lord': { ccw: 'accumulator', cw: 'mechanic' },  // 180 -> 225(CCW), 135(CW)
-        'mechanic': { ccw: 'lord', cw: 'creator' }       // 135 -> 180(CCW), 90(CW)
-    };
-
-    // Determine direction
-    // Standard Math Angle: CCW is increasing.
-    // So if angle > center, we are leaning CCW.
-    // if angle < center, we are leaning CW.
-    
-    // Need to handle the 0/360 boundary for Supporter
-    let lean = 'cw'; // default
-    
-    if (profileKey === 'supporter') {
-        // Center is 0.
-        // If angle is 0-22.5, it's > 0 -> CCW (Star)
-        // If angle is 337.5-360, it's effectively negative -> CW (Deal Maker)
-        if (angle >= 0 && angle < 180) lean = 'ccw';
-        else lean = 'cw';
+    if (isBalanced) {
+        if (primaryProfileEl) primaryProfileEl.textContent = "平衡型 (Balanced)";
+        if (secondaryProfileEl) secondaryProfileEl.textContent = "全方位 (All-round)";
     } else {
-        if (diff > 0) lean = 'ccw';
-        else lean = 'cw';
-    }
-    
-    const secondaryKey = neighbors[profileKey][lean];
-    const secondaryProfile = profiles[secondaryKey];
-    
-    // Format: "SecondaryName (English)"
-    // Extract Chinese name from "Name (English)" format
-    const secNameParts = secondaryProfile.name.split(' ');
-    secondaryName = `${secNameParts[0]} (${secNameParts[1].replace(/[()]/g, '')})`;
+        if (primaryProfileEl) primaryProfileEl.textContent = resultProfile.name.split(' ')[0]; // 只取中文名
+        
+        // Dynamic Secondary Profile Logic
+        // Determine which neighbor is closer based on the angle
+        // Profile Centers:
+        // Creator: 90, Star: 45, Supporter: 0, Deal Maker: 315, Trader: 270, Accumulator: 225, Lord: 180, Mechanic: 135
+        
+        let secondaryName = "";
+        
+        // Define profile centers for calculation
+        const profileCenters = {
+            'creator': 90,
+            'star': 45,
+            'supporter': 0, // or 360
+            'deal_maker': 315,
+            'trader': 270,
+            'accumulator': 225,
+            'lord': 180,
+            'mechanic': 135
+        };
 
-    if (secondaryProfileEl) secondaryProfileEl.textContent = secondaryName;
+        const center = profileCenters[profileKey];
+        let diff = angle - center;
+        
+        // Normalize diff to -180 to 180
+        if (diff > 180) diff -= 360;
+        if (diff < -180) diff += 360;
+
+        // If diff is positive, we are "counter-clockwise" from center (towards smaller angle? No, standard math angle increases CCW)
+        // Wait, standard math: 0 is Right, 90 is Top.
+        // 90 -> 180 is CCW.
+        // So if angle > center, we are CCW.
+        // Let's check neighbors.
+        // Creator (90). CCW neighbor is Mechanic (135). CW neighbor is Star (45).
+        // If angle is 100 ( > 90), we are towards Mechanic.
+        // If angle is 80 ( < 90), we are towards Star.
+        
+        // Special case for Supporter (0).
+        // If angle is 10 (>0), towards Creator? No, Creator is 90. Star is 45.
+        // Wait, 0 -> 45 is CCW.
+        // So if angle > 0, towards Star.
+        // If angle < 0 (e.g. 350 -> -10), towards Deal Maker (315).
+        
+        // Let's map the neighbors explicitly
+        const neighbors = {
+            'creator': { ccw: 'mechanic', cw: 'star' },      // 90 -> 135(CCW), 45(CW)
+            'star': { ccw: 'creator', cw: 'supporter' },     // 45 -> 90(CCW), 0(CW)
+            'supporter': { ccw: 'star', cw: 'deal_maker' },  // 0 -> 45(CCW), 315(CW)
+            'deal_maker': { ccw: 'supporter', cw: 'trader' },// 315 -> 0(CCW), 270(CW)
+            'trader': { ccw: 'deal_maker', cw: 'accumulator' }, // 270 -> 315(CCW), 225(CW)
+            'accumulator': { ccw: 'trader', cw: 'lord' },    // 225 -> 270(CCW), 180(CW)
+            'lord': { ccw: 'accumulator', cw: 'mechanic' },  // 180 -> 225(CCW), 135(CW)
+            'mechanic': { ccw: 'lord', cw: 'creator' }       // 135 -> 180(CCW), 90(CW)
+        };
+
+        // Determine direction
+        // Standard Math Angle: CCW is increasing.
+        // So if angle > center, we are leaning CCW.
+        // if angle < center, we are leaning CW.
+        
+        // Need to handle the 0/360 boundary for Supporter
+        let lean = 'cw'; // default
+        
+        if (profileKey === 'supporter') {
+            // Center is 0.
+            // If angle is 0-22.5, it's > 0 -> CCW (Star)
+            // If angle is 337.5-360, it's effectively negative -> CW (Deal Maker)
+            if (angle >= 0 && angle < 180) lean = 'ccw';
+            else lean = 'cw';
+        } else {
+            if (diff > 0) lean = 'ccw';
+            else lean = 'cw';
+        }
+        
+        const secondaryKey = neighbors[profileKey][lean];
+        const secondaryProfile = profiles[secondaryKey];
+        
+        // Format: "SecondaryName (English)"
+        // Extract Chinese name from "Name (English)" format
+        const secNameParts = secondaryProfile.name.split(' ');
+        secondaryName = `${secNameParts[0]} (${secNameParts[1].replace(/[()]/g, '')})`;
+
+        if (secondaryProfileEl) secondaryProfileEl.textContent = secondaryName;
+    }
 
     // 5. Render Chart (Customized for High Imitation - 8 Axis Octagon)
     const canvas = document.getElementById('radarChart');
