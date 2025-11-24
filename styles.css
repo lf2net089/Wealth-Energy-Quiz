@@ -332,16 +332,16 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 280px; /* Matches the label dot centers */
-  height: 280px;
+  width: 260px; /* Reduced from 280px to prevent overflow */
+  height: 260px;
   border: 1px dashed #cbd5e0; /* Visible square border */
   z-index: 0;
   pointer-events: none;
 }
 
 .chart-wrapper-custom {
-  width: 280px; /* Increased to match the square border size */
-  height: 280px;
+  width: 260px; /* Matches the square border size */
+  height: 260px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -382,15 +382,17 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 }
 
 /* --- Positioning Logic --- */
-/* Grid Square is 280x280 centered in 360x360 */
-/* Grid Lines at: 40px and 320px */
-/* Dot Radius Compensation: 5px (to center dot on line) */
+/* Grid Square is 260x260 centered in 360x360 */
+/* Center: 180, 180 */
+/* Radius: 130 */
+/* Grid Lines at: 50px and 310px */
+/* Dot Radius Compensation: 5px */
 
 /* Top Row (Text Above Dot) */
-/* Anchor: Bottom of Dot. Target Y: 40px. Top: 40 + 5 = 45px */
+/* Anchor: Bottom of Dot. Target Y: 50px. Top: 50 + 5 = 55px */
 .pos-top-left, .pos-top, .pos-top-right {
   flex-direction: column;
-  top: 45px; 
+  top: 55px; 
   transform: translate(-50%, -100%);
 }
 .pos-top-left .dot, .pos-top .dot, .pos-top-right .dot {
@@ -399,10 +401,10 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 }
 
 /* Bottom Row (Text Below Dot) */
-/* Anchor: Top of Dot. Target Y: 320px. Top: 320 - 5 = 315px */
+/* Anchor: Top of Dot. Target Y: 310px. Top: 310 - 5 = 305px */
 .pos-bottom-left, .pos-bottom, .pos-bottom-right {
   flex-direction: column;
-  top: 315px;
+  top: 305px;
   transform: translate(-50%, 0);
 }
 .pos-bottom-left .dot, .pos-bottom .dot, .pos-bottom-right .dot {
@@ -410,36 +412,36 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
   margin-bottom: 4px;
 }
 
-/* Left (Text Left of Dot) */
-/* Anchor: Right of Dot. Target X: 40px. Left: 40 + 5 = 45px */
+/* Left (Text Above Dot - Changed to prevent overflow) */
+/* Anchor: Bottom of Dot. Target X: 50px. Target Y: 180px. */
 .pos-left {
-  flex-direction: row;
-  top: 50%;
-  left: 45px;
-  transform: translate(-100%, -50%);
+  flex-direction: column; /* Changed from row to column */
+  top: 185px; /* Center Y (180) + 5px */
+  left: 50px;
+  transform: translate(-50%, -100%);
 }
 .pos-left .dot {
-  order: 2; /* Dot at right */
-  margin-left: 8px;
+  order: 2; /* Dot at bottom */
+  margin-top: 4px;
 }
 
-/* Right (Text Right of Dot) */
-/* Anchor: Left of Dot. Target X: 320px. Left: 320 - 5 = 315px */
+/* Right (Text Above Dot - Changed to prevent overflow) */
+/* Anchor: Bottom of Dot. Target X: 310px. Target Y: 180px. */
 .pos-right {
-  flex-direction: row;
-  top: 50%;
-  left: 315px;
-  transform: translate(0, -50%);
+  flex-direction: column; /* Changed from row to column */
+  top: 185px; /* Center Y (180) + 5px */
+  left: 310px;
+  transform: translate(-50%, -100%);
 }
 .pos-right .dot {
-  order: -1; /* Dot at left */
-  margin-right: 8px;
+  order: 2; /* Dot at bottom */
+  margin-top: 4px;
 }
 
 /* Horizontal Positions */
-.pos-top-left, .pos-bottom-left { left: 40px; }
+.pos-top-left, .pos-bottom-left { left: 50px; }
 .pos-top, .pos-bottom { left: 50%; }
-.pos-top-right, .pos-bottom-right { left: 320px; }
+.pos-top-right, .pos-bottom-right { left: 310px; }
 
 /* Inner Energy Labels - Adjusted positions */
 .energy-label-inner {
@@ -456,6 +458,15 @@ p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: 
 .pos-in-right { top: 50%; right: 90px; transform: translateY(-50%); }
 .pos-in-bottom { bottom: 90px; left: 50%; transform: translateX(-50%); }
 .pos-in-left { top: 50%; left: 90px; transform: translateY(-50%); }
+
+/* Mobile Scale Down */
+@media (max-width: 400px) {
+  .radar-container-custom {
+    transform: scale(0.9);
+    transform-origin: center top;
+    margin-bottom: -30px;
+  }
+}
 
 /* Footer */
 .footer-watermark {
