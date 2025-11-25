@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>財富能量測驗</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <section id="welcome" class="screen">
+      <div class="content-box">
+        <h1>🔮 財富能量測驗</h1>
+        <p id="quiz-info">直覺作答 · 載入中... · 發現你的致富天賦</p>
+        <div class="input-group">
+          <input type="text" id="username-input" placeholder="請輸入你的暱稱" maxlength="10">
+        </div>
+        <button id="start-btn" class="primary-btn">開始測驗</button>
+      </div>
+    </section>
+
+    <section id="quiz-container" class="screen hidden">
+      <div class="progress-container">
+        <div class="progress-bar-bg">
+          <div id="progress-bar-fill"></div>
+        </div>
+        <div id="progress-text">Question 1 / --</div>
+      </div>
+
+      <div class="question-box">
+        <h2 id="question-text">題目載入中...</h2>
+        <div id="options-grid"></div>
+      </div>
+
+      <div class="nav-controls">
+        <button id="prev-btn" class="secondary-btn hidden" style="border:none; color:#999; font-size:0.9rem;">← 回上一題</button>
+      </div>
+    </section>
+
+    <section id="result" class="screen hidden">
+      <div class="content-box">
+        
+        <!-- 修改：重構截圖區域以符合參考圖佈局 -->
+        <div id="capture-area" class="result-card-report">
+          
+          <!-- 1. 標題區 -->
+          <div class="report-header">
+            <!-- 使用一個通用的圖標作為 Logo，或者您可以替換為您的專案 Logo -->
+            <div class="report-logo-placeholder">🔮</div> 
+            <h2>我的天賦原動力簡圖</h2>
+          </div>
+
+          <!-- 2. 個人資訊區 -->
+          <div class="info-section">
+            <div class="info-row">
+              <span class="info-label">姓名：</span>
+              <span class="info-value" id="report-username"></span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">主要類型：</span>
+              <span class="info-value highlight" id="report-primary-profile"></span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">次級類型：</span>
+              <span class="info-value" id="report-secondary-profile"></span>
+            </div>
+          </div>
+
+          <!-- 3. 能量表格區 -->
+          <div class="table-section">
+            <div class="table-header">天賦頻率</div>
+            <div class="energy-table">
+              <div class="et-cell">發電機：<span id="score-dynamo">0%</span></div>
+              <div class="et-cell">火焰：<span id="score-blaze">0%</span></div>
+              <div class="et-cell">節奏：<span id="score-tempo">0%</span></div>
+              <div class="et-cell">鋼鐵：<span id="score-steel">0%</span></div>
+            </div>
+          </div>
+
+                    <!-- 4. 雷達圖區 (包含外部標籤) -->
+          <div class="radar-container-custom">
+            <!-- Square Grid Background -->
+            <div class="radar-grid-square"></div>
+
+            <!-- 8個角色標籤 (絕對定位) -->
+            <div class="profile-label pos-top">創作者<span class="en">CREATOR</span><div class="dot"></div></div>
+            <div class="profile-label pos-top-right">明星<span class="en">STAR</span><div class="dot"></div></div>
+            <div class="profile-label pos-right">支持者<br><span class="en">SUPPORTER</span><div class="dot"></div></div>
+            <div class="profile-label pos-bottom-right">媒合者<span class="en">DEAL MAKER</span><div class="dot"></div></div>
+            <div class="profile-label pos-bottom">商人<span class="en">TRADER</span><div class="dot"></div></div>
+            <div class="profile-label pos-bottom-left">積蓄者<span class="en">ACCUMULATOR</span><div class="dot"></div></div>
+            <div class="profile-label pos-left">地主<br><span class="en">LORD</span><div class="dot"></div></div>
+            <div class="profile-label pos-top-left">技師<span class="en">MECHANIC</span><div class="dot"></div></div>
+
+            <!-- 4個能量標籤 (內部) -->
+            <div class="energy-label-inner pos-in-top text-dynamo">DYNAMO<br>發電機</div>
+            <div class="energy-label-inner pos-in-right text-blaze">BLAZE<br>火焰</div>
+            <div class="energy-label-inner pos-in-bottom text-tempo">TEMPO<br>節奏</div>
+            <div class="energy-label-inner pos-in-left text-steel">STEEL<br>鋼鐵</div>
+
+            <div class="chart-wrapper-custom">
+              <canvas id="radarChart"></canvas>
+            </div>
+          </div>
+
+          <div class="footer-watermark">
+            <p>WEALTH ENERGY PROFILE</p>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="share-btn" class="primary-btn share-btn" style="display: none;">📤 分享結果</button>
+          <button id="download-btn" class="primary-btn share-btn">📥 下載結果圖</button>
+          <button id="retake-btn" class="secondary-btn">重新測驗</button>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

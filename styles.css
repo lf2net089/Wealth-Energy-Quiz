@@ -1,0 +1,491 @@
+/* Reset & Base */
+:root {
+  --primary: #667eea;
+  --primary-dark: #5a6fd6;
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --white: #ffffff;
+  --gray-light: #f3f4f6;
+  --text-main: #1f2937;
+  --text-sub: #64748b;
+  --radius-card: 20px;
+  --shadow-card: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-gradient);
+  height: 100vh; /* 強制一頁高度 */
+  overflow: hidden; /* 禁止 Body 捲動 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px; /* 縮小邊距 */
+  color: var(--text-main);
+}
+
+.app-container {
+  width: 100%;
+  max-width: 720px; /* 關鍵修改：變寬！ */
+  background: var(--white);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 95vh; /* 確保不超過畫面 */
+  overflow: hidden; 
+}
+
+/* Screen Management */
+.screen { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  padding: 20px; 
+  height: 100%;
+  overflow-y: auto; 
+}
+.hidden { display: none !important; }
+.content-box { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  width: 100%; 
+}
+
+/* Welcome & Inputs (保持置中) */
+h1 { color: var(--primary); margin-bottom: 8px; font-size: 1.6rem; text-align: center; }
+p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem; text-align: center; }
+
+.input-group { width: 100%; margin-bottom: 15px; text-align: center; }
+#username-input {
+  width: 100%; max-width: 250px; padding: 10px 15px;
+  border: 2px solid #e2e8f0; border-radius: 50px;
+  font-size: 0.95rem; text-align: center; outline: none;
+  background: #f8fafc;
+}
+#username-input:focus { border-color: var(--primary); background: white; }
+
+/* Buttons (更緊湊) */
+.primary-btn, .secondary-btn {
+  width: 100%; max-width: 250px; padding: 10px;
+  border-radius: 50px; border: none; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: 0.2s; margin: 0 auto; display: block;
+}
+.primary-btn { background: var(--bg-gradient); color: white; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3); }
+.primary-btn:active { transform: scale(0.98); }
+.secondary-btn { background: transparent; color: #94a3b8; margin-top: 8px; }
+.share-btn { background: #10b981; margin-top: 0; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+
+/* Quiz Styles (不變，但適應寬度) */
+.progress-container { margin-bottom: 15px; width: 100%; }
+.progress-bar-bg { height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden; margin-bottom: 5px; }
+#progress-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
+#progress-text { font-size: 0.8rem; color: #94a3b8; text-align: right; }
+
+.question-box { flex: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; max-width: 500px; margin: 0 auto; }
+#question-text { font-size: 1.2rem; margin-bottom: 15px; text-align: center; color: var(--text-main); min-height: 2.4em; }
+#options-grid { display: grid; gap: 8px; }
+.option-card {
+  background: #f8fafc; padding: 12px 16px; border-radius: 12px;
+  text-align: left; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
+  border: 2px solid transparent; color: var(--text-main);
+}
+.option-card:hover { background: #eef2ff; border-color: var(--primary); }
+.option-card.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* ============================
+   Result Card (橫向佈局核心)
+   ============================ */
+.result-card {
+  background: white;
+  width: 100%;
+  padding: 20px; /* 減少內距 */
+  border-radius: 16px;
+  margin-bottom: 10px;
+  
+  /* 這裡開啟 Grid 左右分欄 */
+  display: grid;
+  grid-template-columns: 35% 65%; /* 左圖右文 */
+  gap: 20px;
+  align-items: center; /* 垂直置中 */
+}
+
+/* 左側：圖表區 */
+.chart-wrapper {
+  width: 100%;
+  height: 200px; /* 強制高度，避免過大 */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 為了讓圖表區包含 meta info，我們可能需要微調 HTML 結構，
+   但如果不想動 HTML，我們可以用 Grid Area 或是 Flex Column 處理左側 */
+
+/* 右側：文字資訊區 */
+.profile-header { 
+  text-align: left; /* 改為靠左 */
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 10px;
+}
+
+.profile-subtitle {
+  font-size: 0.75rem; color: var(--primary); text-transform: uppercase;
+  letter-spacing: 1px; font-weight: bold; display: block;
+}
+
+#result-role-name {
+  font-size: 1.6rem; /* 字體適中 */
+  color: var(--text-main); margin: 2px 0;
+  line-height: 1.2;
+}
+
+#result-role-desc {
+  font-size: 0.85rem; color: var(--text-sub); line-height: 1.4;
+  text-align: left;
+}
+
+/* 下方數據區 (在右側欄位內) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  text-align: left;
+}
+
+.energy-section h3, .career-section h3 {
+  font-size: 0.75rem; color: #94a3b8; margin-bottom: 5px;
+  text-transform: uppercase; font-weight: bold;
+}
+
+/* 能量條更扁 */
+.energy-item { margin-bottom: 4px; }
+.energy-label { font-size: 0.7rem; display: flex; justify-content: space-between; margin-bottom: 2px; }
+.energy-track { height: 4px; background: #f1f5f9; border-radius: 2px; overflow: hidden; }
+
+/* 職業列表 */
+.career-section ul { list-style: none; display: flex; flex-wrap: wrap; gap: 5px; }
+.career-section li {
+  font-size: 0.75rem; color: var(--text-main);
+  background: #f8fafc; padding: 4px 8px; border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Meta Info & Watermark (調整位置) */
+.result-meta {
+  grid-column: 1 / -1; /* 跨滿整行 */
+  font-size: 0.8rem; color: #cbd5e1;
+  margin-bottom: 0; text-align: right;
+  order: -1; /* 讓它跑到最上面 */
+  display: flex; justify-content: flex-end;
+}
+
+.footer-watermark {
+  grid-column: 1 / -1;
+  margin-top: 10px; padding-top: 5px; border-top: 1px solid #f1f5f9;
+  text-align: center;
+}
+.footer-watermark p {
+  font-size: 0.65rem; color: #e2e8f0; letter-spacing: 2px; margin: 0;
+}
+
+/* 按鈕區 */
+.action-buttons { 
+  width: 100%; 
+  display: flex; 
+  flex-direction: row; /* 按鈕並排 */
+  gap: 10px; 
+  justify-content: center;
+}
+
+/* =========================================
+   手機版適配 (螢幕 < 500px 時切回垂直)
+   ========================================= */
+@media (max-width: 550px) {
+  .result-card {
+    grid-template-columns: 1fr; /* 變回單欄 */
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  .chart-wrapper { height: 180px; margin-bottom: 10px; }
+  
+  .profile-header { text-align: center; }
+  #result-role-desc { text-align: center; }
+  
+  .stats-grid { gap: 10px; }
+  
+  .action-buttons { flex-direction: column; } /* 按鈕變回垂直 */
+}
+
+/* ============================
+   New Report Style (High Imitation)
+   ============================ */
+.result-card-report {
+  background: white;
+  width: 100%;
+  max-width: 500px; /* 限制寬度以符合A4比例感 */
+  margin: 0 auto 20px auto;
+  padding: 30px 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+  font-family: "Microsoft YaHei", "Heiti TC", sans-serif; /* 仿照常見報告字體 */
+}
+
+/* Header */
+.report-header {
+  text-align: center;
+  margin-bottom: 25px;
+  width: 100%;
+}
+.report-logo-placeholder {
+  font-size: 40px;
+  margin-bottom: 5px;
+}
+.report-header h2 {
+  color: #2c5282; /* 深藍色標題 */
+  font-size: 1.4rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Info Section */
+.info-section {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+.info-row {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  align-items: baseline;
+}
+.info-label {
+  width: 90px;
+  text-align: right;
+  color: #4a5568;
+  font-weight: normal;
+}
+.info-value {
+  flex: 1;
+  padding-left: 10px;
+  color: #2d3748;
+  font-weight: 500;
+}
+.info-value.highlight {
+  color: #2b6cb0; /* 藍色強調 */
+  font-weight: bold;
+}
+
+/* Table Section */
+.table-section {
+  width: 100%;
+  border: 1px solid #cbd5e0;
+  margin-bottom: 30px;
+}
+.table-header {
+  background: white;
+  text-align: center;
+  padding: 8px;
+  font-size: 0.9rem;
+  color: #4a5568;
+  border-bottom: 1px solid #cbd5e0;
+}
+.energy-table {
+  display: flex;
+  justify-content: space-around;
+  background: white;
+}
+.et-cell {
+  flex: 1;
+  text-align: center;
+  padding: 10px 5px;
+  font-size: 0.85rem;
+  border-right: 1px solid #cbd5e0;
+  color: #2d3748;
+}
+.et-cell:last-child { border-right: none; }
+
+/* Radar Chart Container (Custom Layout) */
+.radar-container-custom {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  margin: 0 auto 20px auto;
+}
+
+/* Square Grid Background - The "Square Border" */
+.radar-grid-square {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px; /* Reduced from 280px to prevent overflow */
+  height: 260px;
+  border: 1px dashed #cbd5e0; /* Visible square border */
+  z-index: 0;
+  pointer-events: none;
+}
+
+.chart-wrapper-custom {
+  width: 260px; /* Matches the square border size */
+  height: 260px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Profile Labels (Base) */
+.profile-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #2c5282;
+  font-weight: bold;
+  line-height: 1.2;
+  width: 100px; /* Fixed width for centering */
+  z-index: 2;
+  pointer-events: none;
+}
+.profile-label .en {
+  font-size: 0.6rem;
+  color: #718096;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 2px;
+}
+.profile-label .dot {
+  width: 10px;
+  height: 10px;
+  background: #ed8936;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-shrink: 0; /* Prevent dot from shrinking */
+}
+
+/* --- Positioning Logic --- */
+/* Grid Square is 260x260 centered in 360x360 */
+/* Center: 180, 180 */
+/* Radius: 130 */
+/* Grid Lines at: 50px and 310px */
+/* Dot Radius Compensation: 5px */
+
+/* Top Row (Text Above Dot) */
+/* Anchor: Bottom of Dot. Target Y: 50px. Top: 50 + 5 = 55px */
+.pos-top-left, .pos-top, .pos-top-right {
+  flex-direction: column;
+  top: 55px; 
+  transform: translate(-50%, -100%);
+}
+.pos-top-left .dot, .pos-top .dot, .pos-top-right .dot {
+  order: 2; /* Dot at bottom */
+  margin-top: 4px;
+}
+
+/* Bottom Row (Text Below Dot) */
+/* Anchor: Top of Dot. Target Y: 310px. Top: 310 - 5 = 305px */
+.pos-bottom-left, .pos-bottom, .pos-bottom-right {
+  flex-direction: column;
+  top: 305px;
+  transform: translate(-50%, 0);
+}
+.pos-bottom-left .dot, .pos-bottom .dot, .pos-bottom-right .dot {
+  order: -1; /* Dot at top */
+  margin-bottom: 4px;
+}
+
+/* Left (Text Above Dot - Changed to prevent overflow) */
+/* Anchor: Bottom of Dot. Target X: 50px. Target Y: 180px. */
+.pos-left {
+  flex-direction: column; /* Changed from row to column */
+  top: 185px; /* Center Y (180) + 5px */
+  left: 50px;
+  transform: translate(-50%, -100%);
+}
+.pos-left .dot {
+  order: 2; /* Dot at bottom */
+  margin-top: 4px;
+}
+
+/* Right (Text Above Dot - Changed to prevent overflow) */
+/* Anchor: Bottom of Dot. Target X: 310px. Target Y: 180px. */
+.pos-right {
+  flex-direction: column; /* Changed from row to column */
+  top: 185px; /* Center Y (180) + 5px */
+  left: 310px;
+  transform: translate(-50%, -100%);
+}
+.pos-right .dot {
+  order: 2; /* Dot at bottom */
+  margin-top: 4px;
+}
+
+/* Horizontal Positions */
+.pos-top-left, .pos-bottom-left { left: 50px; }
+.pos-top, .pos-bottom { left: 50%; }
+.pos-top-right, .pos-bottom-right { left: 310px; }
+
+/* Inner Energy Labels - Adjusted positions */
+.energy-label-inner {
+  position: absolute;
+  font-size: 0.65rem;
+  color: #a0aec0;
+  text-align: center;
+  line-height: 1.1;
+  z-index: 0;
+  font-weight: 600;
+}
+/* 距離中心點約 65px */
+.pos-in-top { top: 90px; left: 50%; transform: translateX(-50%); }
+.pos-in-right { top: 50%; right: 90px; transform: translateY(-50%); }
+.pos-in-bottom { bottom: 90px; left: 50%; transform: translateX(-50%); }
+.pos-in-left { top: 50%; left: 90px; transform: translateY(-50%); }
+
+/* Mobile Scale Down & Centering Fix */
+@media (max-width: 450px) {
+  .radar-container-custom {
+    left: 50%;
+    margin-left: -180px; /* Force center alignment relative to container */
+    transform: scale(0.85);
+    transform-origin: center top;
+    margin-bottom: -40px; /* Compensate for empty space from scaling */
+  }
+}
+
+@media (max-width: 380px) {
+  .radar-container-custom {
+    transform: scale(0.75);
+    margin-bottom: -70px;
+  }
+}
+
+/* Footer */
+.footer-watermark {
+  margin-top: 10px;
+  border-top: none;
+  color: #cbd5e0;
+}
+
+/* Inner Energy Labels - Colors */
+.text-dynamo { color: #009900; } /* Pure Green (High Contrast) */
+.text-blaze { color: #FF0000; } /* Pure Red */
+.text-tempo { color: #F59E0B; } /* High Saturation Orange (Readable Yellow) */
+.text-steel { color: #4A5568; } /* High Contrast Dark Grey (Steel) */
